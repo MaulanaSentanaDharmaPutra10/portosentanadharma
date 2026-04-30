@@ -363,21 +363,32 @@
                 }
             }
 
-            // Attempt to autoplay immediately without any UI barrier
+            // Attempt to autoplay immediately
             const playPromise = music.play();
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
                     updateVinylState();
                 }).catch(error => {
-                    // If blocked by browser, wait for the absolute first natural interaction
-                    const playOnInteraction = () => {
-                        music.play().then(() => updateVinylState()).catch(e => {});
-                        ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => {
-                            document.body.removeEventListener(evt, playOnInteraction);
-                        });
+                    console.log("Autoplay ditahan oleh browser. Menunggu klik pertama dari user...");
+                    
+                    // Keep trying to play on valid user interactions until successful
+                    const tryPlay = () => {
+                        if (music.paused) {
+                            music.play().then(() => {
+                                updateVinylState();
+                                // Remove listeners once successfully playing
+                                ['click', 'touchstart', 'keydown'].forEach(evt => {
+                                    document.body.removeEventListener(evt, tryPlay);
+                                });
+                            }).catch(e => {
+                                // Ignore error if it still fails
+                            });
+                        }
                     };
-                    ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => {
-                        document.body.addEventListener(evt, playOnInteraction, { once: true });
+                    
+                    // Only use trusted gesture events (browser ignores mousemove/scroll for audio)
+                    ['click', 'touchstart', 'keydown'].forEach(evt => {
+                        document.body.addEventListener(evt, tryPlay);
                     });
                 });
             }
