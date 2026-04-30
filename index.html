@@ -412,17 +412,40 @@
             music.addEventListener("play", updateVinylState);
             music.addEventListener("pause", updateVinylState);
 
-            // Add UI Click Sound Effect to all interactive elements
-            const uiClickSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b817bc73.mp3?filename=click-button-140881.mp3");
-            uiClickSound.volume = 0.4; // Slightly lower volume for subtle effect
+            // Add UI Click Sound Effect to all interactive elements using Web Audio API (Futuristic & Reliable)
+            let audioCtx = null;
+            function playClick() {
+                try {
+                    if (!audioCtx) {
+                        const AudioContext = window.AudioContext || window.webkitAudioContext;
+                        audioCtx = new AudioContext();
+                    }
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                    const osc = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    
+                    // Create a sharp, subtle "click/pop" sound
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+                    
+                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                    
+                    osc.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                } catch(e) {}
+            }
 
-            const interactiveElements = document.querySelectorAll('button, a.btn, .nav-item, .contact-item, .scroll-indicator a');
+            const interactiveElements = document.querySelectorAll('button, a, .nav-item, .contact-item, .experience-card, .timeline-content');
             interactiveElements.forEach(el => {
                 el.addEventListener('click', () => {
-                    // Clone audio node to allow overlapping sounds for rapid clicks
-                    const soundClone = uiClickSound.cloneNode();
-                    soundClone.volume = 0.4;
-                    soundClone.play().catch(e => {});
+                    playClick();
                 });
             });
         });
