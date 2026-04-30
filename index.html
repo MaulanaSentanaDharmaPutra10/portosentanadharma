@@ -411,6 +411,20 @@
 
             music.addEventListener("play", updateVinylState);
             music.addEventListener("pause", updateVinylState);
+
+            // Add UI Click Sound Effect to all interactive elements
+            const uiClickSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b817bc73.mp3?filename=click-button-140881.mp3");
+            uiClickSound.volume = 0.4; // Slightly lower volume for subtle effect
+
+            const interactiveElements = document.querySelectorAll('button, a.btn, .nav-item, .contact-item, .scroll-indicator a');
+            interactiveElements.forEach(el => {
+                el.addEventListener('click', () => {
+                    // Clone audio node to allow overlapping sounds for rapid clicks
+                    const soundClone = uiClickSound.cloneNode();
+                    soundClone.volume = 0.4;
+                    soundClone.play().catch(e => {});
+                });
+            });
         });
     </script>
 
