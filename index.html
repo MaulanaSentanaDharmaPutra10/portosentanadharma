@@ -322,15 +322,6 @@
         </div>
     </footer>
 
-    <!-- Enter Site Overlay (To allow audio autoplay) -->
-    <div id="enter-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; transition: opacity 0.5s ease;">
-        <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 20px; background: linear-gradient(45deg, #ff4757, #ffa502); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Welcome to Sentana Portfolio</h2>
-        <p style="margin-bottom: 30px; font-family: 'Inter', sans-serif; color: #ccc;">Experience with sound</p>
-        <button id="enter-btn" style="padding: 12px 30px; font-size: 1.1rem; background: transparent; border: 2px solid #ff4757; color: #ff4757; cursor: pointer; border-radius: 30px; transition: 0.3s; font-family: 'Outfit', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-            Enter Site & Play Music
-        </button>
-    </div>
-
     <!-- Audio Player Widget (Vinyl Style) -->
     <div id="vinyl-player" class="spinning" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; cursor: pointer; width: 60px; height: 60px; border-radius: 50%; background: #111; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #333; overflow: hidden; transition: transform 0.2s ease;" title="Klik untuk Play/Pause">
         <!-- Vinyl Grooves -->
@@ -343,7 +334,7 @@
     </div>
 
     <!-- Retro / Synthwave Background Music -->
-    <audio id="bg-music" loop preload="auto">
+    <audio id="bg-music" loop autoplay preload="auto">
         <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=retro-80s-108156.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
@@ -354,12 +345,7 @@
         }
         .spinning {
             animation: spin-vinyl 4s linear infinite;
-            animation-play-state: paused; /* Default paused until actually playing */
-        }
-        #enter-btn:hover {
-            background: #ff4757;
-            color: #fff !important;
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+            animation-play-state: paused;
         }
     </style>
 
@@ -367,8 +353,6 @@
         document.addEventListener("DOMContentLoaded", function() {
             const music = document.getElementById("bg-music");
             const vinyl = document.getElementById("vinyl-player");
-            const enterOverlay = document.getElementById("enter-overlay");
-            const enterBtn = document.getElementById("enter-btn");
 
             // Function to sync vinyl spinning with audio state
             function updateVinylState() {
@@ -379,28 +363,28 @@
                 }
             }
 
-            // Start everything when user clicks "Enter Site"
-            enterBtn.addEventListener("click", function() {
-                // Play music
-                const playPromise = music.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(_ => {
-                        updateVinylState();
-                    }).catch(error => {
-                        console.log("Audio play failed:", error);
+            // Attempt to autoplay immediately without any UI barrier
+            const playPromise = music.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    updateVinylState();
+                }).catch(error => {
+                    // If blocked by browser, wait for the absolute first natural interaction
+                    const playOnInteraction = () => {
+                        music.play().then(() => updateVinylState()).catch(e => {});
+                        ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => {
+                            document.body.removeEventListener(evt, playOnInteraction);
+                        });
+                    };
+                    ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => {
+                        document.body.addEventListener(evt, playOnInteraction, { once: true });
                     });
-                }
-                
-                // Hide overlay
-                enterOverlay.style.opacity = "0";
-                setTimeout(() => {
-                    enterOverlay.style.display = "none";
-                }, 500);
-            });
+                });
+            }
 
             // Toggle Play/Pause when clicking the vinyl
             vinyl.addEventListener("click", function(e) {
-                e.stopPropagation(); // Prevent triggering other clicks
+                e.stopPropagation();
                 if (music.paused) {
                     music.play();
                 } else {
