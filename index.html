@@ -322,13 +322,83 @@
         </div>
     </footer>
 
-    <!-- Audio Player Widget -->
-    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: 10px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <audio controls loop>
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+    <!-- Audio Player Widget (Vinyl Style) -->
+    <div id="vinyl-player" class="spinning" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; cursor: pointer; width: 60px; height: 60px; border-radius: 50%; background: #111; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #333; overflow: hidden; transition: transform 0.2s ease;" title="Klik untuk Play/Pause">
+        <!-- Vinyl Grooves -->
+        <div style="position: absolute; width: 45px; height: 45px; border-radius: 50%; border: 1px solid #222;"></div>
+        <div style="position: absolute; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #222;"></div>
+        <!-- Vinyl Center Label -->
+        <div style="position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #ff4757; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 4px; height: 4px; border-radius: 50%; background: #fff;"></div>
+        </div>
     </div>
+
+    <audio id="bg-music" loop autoplay>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <style>
+        @keyframes spin-vinyl {
+            100% { transform: rotate(360deg); }
+        }
+        .spinning {
+            animation: spin-vinyl 4s linear infinite;
+            animation-play-state: paused; /* Default paused until actually playing */
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const music = document.getElementById("bg-music");
+            const vinyl = document.getElementById("vinyl-player");
+
+            // Function to sync vinyl spinning with audio state
+            function updateVinylState() {
+                if (!music.paused) {
+                    vinyl.style.animationPlayState = "running";
+                } else {
+                    vinyl.style.animationPlayState = "paused";
+                }
+            }
+
+            // Attempt to autoplay
+            const playPromise = music.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Autoplay started successfully
+                    updateVinylState();
+                }).catch(error => {
+                    // Autoplay was blocked by browser. Wait for first user interaction.
+                    console.log("Autoplay blocked by browser. Waiting for user interaction.");
+                    
+                    const playOnInteraction = () => {
+                        music.play();
+                        updateVinylState();
+                        document.body.removeEventListener('click', playOnInteraction);
+                        document.body.removeEventListener('scroll', playOnInteraction);
+                    };
+
+                    document.body.addEventListener('click', playOnInteraction, { once: true });
+                    document.body.addEventListener('scroll', playOnInteraction, { once: true });
+                });
+            }
+
+            // Toggle Play/Pause when clicking the vinyl
+            vinyl.addEventListener("click", function(e) {
+                e.stopPropagation(); // Prevent triggering the body click
+                if (music.paused) {
+                    music.play();
+                } else {
+                    music.pause();
+                }
+                updateVinylState();
+            });
+
+            music.addEventListener("play", updateVinylState);
+            music.addEventListener("pause", updateVinylState);
+        });
+    </script>
 
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
