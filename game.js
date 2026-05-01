@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+(function() {
     const canvas = document.getElementById("gameCanvas");
     
     // Ensure elements exist
@@ -231,4 +231,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
-});
+})();

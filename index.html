@@ -339,6 +339,135 @@
         </div>
     </footer>
 
+    <!-- Enter Site Overlay (To allow audio autoplay) -->
+    <div id="enter-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; transition: opacity 0.5s ease;">
+        <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 20px; background: linear-gradient(45deg, #ff4757, #ffa502); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Welcome to Sentana Portfolio</h2>
+        <p style="margin-bottom: 30px; font-family: 'Inter', sans-serif; color: #ccc;">For the best immersive experience, please enable your audio.</p>
+        <button id="enter-btn" style="padding: 12px 30px; font-size: 1.1rem; background: transparent; border: 2px solid #ff4757; color: #ff4757; cursor: pointer; border-radius: 30px; transition: 0.3s; font-family: 'Outfit', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+            Explore Portfolio
+        </button>
+    </div>
+
+    <!-- Audio Player Widget (Vinyl Style) -->
+    <div id="vinyl-player" class="spinning" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; cursor: pointer; width: 60px; height: 60px; border-radius: 50%; background: #111; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #333; overflow: hidden; transition: transform 0.2s ease;" title="Klik untuk Play/Pause">
+        <!-- Vinyl Grooves -->
+        <div style="position: absolute; width: 45px; height: 45px; border-radius: 50%; border: 1px solid #222;"></div>
+        <div style="position: absolute; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #222;"></div>
+        <!-- Vinyl Center Label -->
+        <div style="position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #ff4757; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 4px; height: 4px; border-radius: 50%; background: #fff;"></div>
+        </div>
+    </div>
+
+    <!-- Retro / Synthwave Background Music -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=retro-80s-108156.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <style>
+        @keyframes spin-vinyl {
+            100% { transform: rotate(360deg); }
+        }
+        .spinning {
+            animation: spin-vinyl 4s linear infinite;
+            animation-play-state: paused;
+        }
+        #enter-btn:hover {
+            background: #ff4757;
+            color: #fff !important;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const music = document.getElementById("bg-music");
+            const vinyl = document.getElementById("vinyl-player");
+            const enterOverlay = document.getElementById("enter-overlay");
+            const enterBtn = document.getElementById("enter-btn");
+
+            // Function to sync vinyl spinning with audio state
+            function updateVinylState() {
+                if (!music.paused) {
+                    vinyl.style.animationPlayState = "running";
+                } else {
+                    vinyl.style.animationPlayState = "paused";
+                }
+            }
+
+            // Start everything when user clicks "Enter Site"
+            enterBtn.addEventListener("click", function() {
+                // Play music
+                const playPromise = music.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        updateVinylState();
+                    }).catch(error => {
+                        console.log("Audio play failed:", error);
+                    });
+                }
+                
+                // Hide overlay
+                enterOverlay.style.opacity = "0";
+                setTimeout(() => {
+                    enterOverlay.style.display = "none";
+                }, 500);
+            });
+
+            // Toggle Play/Pause when clicking the vinyl
+            vinyl.addEventListener("click", function(e) {
+                e.stopPropagation();
+                if (music.paused) {
+                    music.play();
+                } else {
+                    music.pause();
+                }
+                updateVinylState();
+            });
+
+            music.addEventListener("play", updateVinylState);
+            music.addEventListener("pause", updateVinylState);
+
+            // Add UI Click Sound Effect to all interactive elements using Web Audio API (Futuristic & Reliable)
+            let audioCtx = null;
+            function playClick() {
+                try {
+                    if (!audioCtx) {
+                        const AudioContext = window.AudioContext || window.webkitAudioContext;
+                        audioCtx = new AudioContext();
+                    }
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                    const osc = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    
+                    // Create a sharp, subtle "click/pop" sound
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+                    
+                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                    
+                    osc.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                } catch(e) {}
+            }
+
+            const interactiveElements = document.querySelectorAll('button, a, .nav-item, .contact-item, .experience-card, .timeline-content');
+            interactiveElements.forEach(el => {
+                el.addEventListener('click', () => {
+                    playClick();
+                });
+            });
+        });
+    </script>
+
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
     <script src="game.js"></script>
