@@ -458,8 +458,9 @@
 
             // Start everything when user clicks "Enter Site"
             enterBtn.addEventListener("click", function () {
-                // Restore scroll
+                // Restore scroll and ensure we are at the top
                 document.body.style.overflow = "auto";
+                window.scrollTo(0, 0);
 
                 // Play music and lower its volume to balance with game/UI sounds
                 music.volume = 0.4;
