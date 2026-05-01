@@ -16,10 +16,33 @@
 
     // Audio Context
     let audioCtx = null;
-    // Frequencies for a simple neon synth (C4, D4, E4, G4)
-    const notes = [261.63, 293.66, 329.63, 392.00];
     
-    function playNote(colIndex) {
+    // Frequencies for notes
+    const freq = {
+        E4: 329.63,
+        F4: 349.23,
+        G4: 392.00,
+        A4: 440.00,
+        B4: 493.88,
+        C5: 523.25,
+        D5: 587.33
+    };
+
+    // Indonesia Raya Melody (Stanza 1 simplified)
+    const indonesiaRayaNotes = [
+        // In-do-ne-sia ta-nah air-ku
+        freq.G4, freq.G4, freq.C5, freq.C5, freq.B4, freq.B4, freq.A4,
+        // Ta-nah tum-pah da-rah-ku
+        freq.G4, freq.G4, freq.A4, freq.A4, freq.G4, freq.F4, freq.E4,
+        // Di-sa-na-lah a-ku ber-di-ri
+        freq.G4, freq.G4, freq.D5, freq.D5, freq.C5, freq.C5, freq.B4,
+        // Ja-di pan-du i-bu-ku
+        freq.G4, freq.G4, freq.A4, freq.A4, freq.B4, freq.A4, freq.G4
+    ];
+    
+    let currentNoteIndex = 0;
+    
+    function playNote() {
         try {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -31,7 +54,10 @@
             
             // Neon synth sound
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(notes[colIndex % 4], audioCtx.currentTime);
+            osc.frequency.setValueAtTime(indonesiaRayaNotes[currentNoteIndex], audioCtx.currentTime);
+            
+            // Move to the next note in the melody
+            currentNoteIndex = (currentNoteIndex + 1) % indonesiaRayaNotes.length;
             
             gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
@@ -72,6 +98,7 @@
     function resetGame() {
         score = 0;
         speed = 4;
+        currentNoteIndex = 0;
         tiles = [];
         // Pre-fill tiles
         for (let i = 0; i < 6; i++) {
