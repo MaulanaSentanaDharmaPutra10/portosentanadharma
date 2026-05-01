@@ -453,8 +453,22 @@
         });
     </script>
 
+    <!-- Game Button -->
+    <div id="game-btn" style="position: fixed; bottom: 20px; left: 20px; z-index: 9998; cursor: pointer; width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 71, 87, 0.1); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid #ff4757; transition: transform 0.2s ease, background 0.3s; color: #ff4757; font-size: 1.5rem;" title="Main Flappy Bird" onmouseover="this.style.background='#ff4757'; this.style.color='#fff';" onmouseout="this.style.background='rgba(255, 71, 87, 0.1)'; this.style.color='#ff4757';">
+        <i class="fas fa-gamepad"></i>
+    </div>
+
+    <!-- Game Modal -->
+    <div id="game-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 10001; display: none; flex-direction: column; align-items: center; justify-content: center;">
+        <button id="close-game" style="position: absolute; top: 20px; right: 30px; background: none; border: none; color: #fff; font-size: 3rem; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='#ff4757'" onmouseout="this.style.color='#fff'">&times;</button>
+        <h2 style="color: #fff; font-family: 'Outfit', sans-serif; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;">Flappy MS</h2>
+        <canvas id="gameCanvas" width="320" height="480" style="background: #70c5ce; border-radius: 10px; border: 4px solid #fff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);"></canvas>
+        <p style="color: #ccc; font-family: 'Inter', sans-serif; margin-top: 15px; font-size: 0.9rem;">Klik canvas atau tekan <kbd style="background: #333; padding: 2px 5px; border-radius: 3px;">Spasi</kbd> untuk melompat</p>
+    </div>
+
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
+    <script src="game.js"></script>
 </body>
 
 </html>
