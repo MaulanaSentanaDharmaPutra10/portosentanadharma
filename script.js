@@ -148,6 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentIndex = index;
                 updateDots(currentIndex);
             }
+        });
+        
         // Expand/Minimize Game Logic
         const gameWrappers = document.querySelectorAll('.arcade-slider .game-wrapper');
         
