@@ -116,7 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const scrollToGame = (index) => {
-            const scrollAmount = arcadeSlider.clientWidth * index;
+            const gameWidth = document.querySelector('.arcade-slider .game-wrapper').offsetWidth;
+            const gap = parseFloat(getComputedStyle(arcadeSlider).gap) || 0;
+            const scrollAmount = (gameWidth + gap) * index;
+            
             arcadeSlider.scrollTo({
                 left: scrollAmount,
                 behavior: 'smooth'
@@ -143,8 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update dots on scroll (for mobile touch)
         arcadeSlider.addEventListener('scroll', () => {
-            const index = Math.round(arcadeSlider.scrollLeft / arcadeSlider.clientWidth);
-            if (index !== currentIndex) {
+            const gameWidth = document.querySelector('.arcade-slider .game-wrapper').offsetWidth;
+            const gap = parseFloat(getComputedStyle(arcadeSlider).gap) || 0;
+            const index = Math.round(arcadeSlider.scrollLeft / (gameWidth + gap));
+            if (index !== currentIndex && index >= 0 && index < gameCount) {
                 currentIndex = index;
                 updateDots(currentIndex);
             }
