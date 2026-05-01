@@ -27,7 +27,7 @@
     
     /* Spacing & Sizes */
     --container-width: 1200px;
-    --section-padding: clamp(5rem, 10vw, 8rem);
+    --section-padding: clamp(3rem, 7vw, 5rem);
     
     /* Transitions */
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -394,7 +394,7 @@ ul {
     min-height: 100dvh;
     display: flex;
     align-items: center;
-    padding: 6rem 0 3rem 0;
+    padding: 3rem 0 1.5rem 0;
 }
 
 .hero-content {
