@@ -151,19 +151,14 @@
             let isTileFree = isFree(t);
             
             ctx.save();
-            // Shadow for depth
-            ctx.shadowBlur = 5;
-            ctx.shadowColor = "rgba(0,0,0,0.5)";
-            ctx.shadowOffsetY = t.z * 3;
-
-            // Tile Base
-            ctx.fillStyle = isTileFree ? "#1a1a1a" : "#0d0d0d";
+            // Optimize shadows (only for selected tile)
             if (selectedTile === t) {
-                ctx.strokeStyle = "#f59e0b";
-                ctx.lineWidth = 2;
                 ctx.shadowBlur = 15;
                 ctx.shadowColor = "#f59e0b";
+                ctx.strokeStyle = "#f59e0b";
+                ctx.lineWidth = 2;
             } else {
+                ctx.shadowBlur = 0; // Disable shadows for normal tiles
                 ctx.strokeStyle = isTileFree ? "#f59e0b44" : "#333";
                 ctx.lineWidth = 1;
             }
@@ -175,7 +170,6 @@
             ctx.stroke();
 
             // Symbol
-            ctx.shadowBlur = 0;
             ctx.fillStyle = isTileFree ? "#fff" : "#444";
             ctx.font = "24px 'Inter', sans-serif";
             ctx.textAlign = "center";

@@ -170,7 +170,8 @@
             if (!t.clicked) {
                 // Neon glow effect for unclicked tile
                 ctx.save();
-                ctx.shadowBlur = 20;
+                // Optimize shadows for mobile
+                ctx.shadowBlur = 10;
                 ctx.shadowColor = "#00f3ff";
                 
                 let tileGrd = ctx.createLinearGradient(t.x, t.y, t.x + colWidth, t.y + tileHeight);
@@ -243,10 +244,10 @@
             ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            ctx.shadowBlur = 20;
+            ctx.shadowBlur = 10;
             ctx.shadowColor = "#ff4757";
             ctx.fillStyle = "#ff4757";
-            ctx.font = "900 40px 'Outfit', sans-serif";
+            ctx.font = "900 36px 'Outfit', sans-serif";
             ctx.fillText("GAME OVER", canvas.width/2, 120);
             
             ctx.shadowBlur = 15;

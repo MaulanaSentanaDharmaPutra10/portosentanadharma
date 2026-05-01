@@ -120,49 +120,30 @@
     };
 
     const bird = {
-        x: 60,
+        x: 50,
         y: 150,
-        radius: 12,
+        w: 34,
+        h: 24,
         velocity: 0,
         gravity: 0.25,
-        jump: 4.8,
+        jump: 4.6,
+        rotation: 0,
+
         draw() {
             ctx.save();
             ctx.translate(this.x, this.y);
+            ctx.rotate(this.rotation);
             
-            let rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (this.velocity * 0.1)));
-            ctx.rotate(rotation);
-
-            // Neon Glow
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = "#f3c500";
-
-            // Body (Retro Yellow)
-            ctx.fillStyle = "#f3c500";
+            // Simplified Bird Rendering (less shadows)
+            ctx.fillStyle = "#ff00e4";
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = "#ff00e4";
             ctx.beginPath();
-            ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+            ctx.roundRect(-this.w/2, -this.h/2, this.w, this.h, 5);
             ctx.fill();
             
-            ctx.shadowBlur = 0;
-            ctx.strokeStyle = "#000";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Wing
-            let flapY = (currentState === 1 && frames % 10 < 5) ? -3 : 0;
-            ctx.fillStyle = "#fff";
-            ctx.beginPath();
-            ctx.ellipse(-4, 2 + flapY, 6, 4, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-
             // Eye
             ctx.fillStyle = "#fff";
-            ctx.beginPath(); ctx.arc(4, -4, 4, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = "#000";
-            ctx.beginPath(); ctx.arc(5, -4, 1.5, 0, Math.PI * 2); ctx.fill();
-
-            // Beak
             ctx.fillStyle = "#f16723";
             ctx.beginPath();
             ctx.moveTo(8, 0); ctx.lineTo(18, 2); ctx.lineTo(8, 6);
@@ -175,17 +156,13 @@
                 this.velocity += this.gravity;
                 this.y += this.velocity;
                 
-                if (this.y + this.radius >= canvas.height - 50) {
-                    this.y = canvas.height - 50 - this.radius;
-                    if(currentState === 1) {
-                        playSound('hit');
-                        screenShake = 10;
-                    }
-                    currentState = 2;
-                }
-                if (this.y - this.radius <= 0) {
-                    this.y = this.radius;
-                    this.velocity = 0;
+                // Rotation
+                this.rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (this.velocity * 0.1)));
+
+                if (this.y + this.h/2 >= canvas.height - 50) {
+                    this.y = canvas.height - 50 - this.h/2;
+                    currentState = 2; // Game over
+                    playSound('hit');
                 }
             } else if (currentState === 0) {
                 this.y = 150 + Math.cos(frames / 10) * 8;
@@ -213,8 +190,6 @@
                 pGrd.addColorStop(1, "#ff00e4");
 
                 ctx.fillStyle = pGrd;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = "#ff00e4";
 
                 // Top Pipe
                 ctx.fillRect(p.x, 0, this.width, p.y);
@@ -226,8 +201,6 @@
                 let bottomHeight = canvas.height - (p.y + this.gap) - 50;
                 ctx.fillRect(p.x, p.y + this.gap, this.width, bottomHeight);
                 ctx.strokeRect(p.x, p.y + this.gap, this.width, bottomHeight);
-                
-                ctx.shadowBlur = 0;
             }
         },
         update() {
@@ -247,8 +220,8 @@
 
                 // Collision Detection
                 let bottomY = p.y + this.gap;
-                if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.width &&
-                    (bird.y - bird.radius < p.y || bird.y + bird.radius > bottomY)) {
+                if (bird.x + bird.w/2 > p.x && bird.x - bird.w/2 < p.x + this.width &&
+                    (bird.y - bird.h/2 < p.y || bird.y + bird.h/2 > bottomY)) {
                     playSound('hit');
                     currentState = 2; // Game Over
                 }
