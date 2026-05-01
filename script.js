@@ -155,27 +155,68 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Expand/Minimize Game Logic
-        const gameWrappers = document.querySelectorAll('.arcade-slider .game-wrapper');
+        // New Game Modal Logic
+        const gameModal = document.getElementById('gameModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalCanvasContainer = document.getElementById('modalCanvasContainer');
+        const modalTitle = document.getElementById('modalTitle');
         
-        gameWrappers.forEach(wrapper => {
-            const canvas = wrapper.querySelector('canvas');
-            const closeBtn = wrapper.querySelector('.close-game');
+        let originalParent = null;
+        let activeCanvas = null;
 
-            canvas.addEventListener('click', (e) => {
-                if (!wrapper.classList.contains('expanded')) {
-                    // Only expand if not already expanded
-                    wrapper.classList.add('expanded');
+        gameWrappers.forEach(wrapper => {
+            wrapper.addEventListener('click', () => {
+                const canvas = wrapper.querySelector('canvas');
+                const title = wrapper.querySelector('h3');
+                
+                if (canvas && gameModal) {
+                    originalParent = canvas.parentElement;
+                    activeCanvas = canvas;
+                    
+                    // Set title and color
+                    modalTitle.innerText = title.innerText;
+                    modalTitle.style.color = title.style.color;
+                    modalTitle.style.textShadow = title.style.textShadow;
+                    
+                    // Move canvas to modal
+                    modalCanvasContainer.appendChild(canvas);
+                    
+                    // Show modal
+                    gameModal.style.display = 'flex';
                     document.body.style.overflow = 'hidden'; // Lock scroll
                 }
             });
-
-            closeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                wrapper.classList.remove('expanded');
-                document.body.style.overflow = 'auto'; // Restore scroll
-            });
         });
+
+        const closeGame = () => {
+            if (activeCanvas && originalParent) {
+                // Move canvas back
+                originalParent.appendChild(activeCanvas);
+                
+                // Hide modal
+                gameModal.style.display = 'none';
+                document.body.style.overflow = ''; // Unlock scroll
+                
+                activeCanvas = null;
+                originalParent = null;
+            }
+        };
+
+        if (closeModal) {
+            closeModal.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeGame();
+            });
+        }
+
+        // Close modal on background click
+        if (gameModal) {
+            gameModal.addEventListener('click', (e) => {
+                if (e.target === gameModal || e.target.classList.contains('modal-content')) {
+                    closeGame();
+                }
+            });
+        }
     }
 
 });
