@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maulana Sentana Dharma Putra | Portfolio</title>
+    <title>Maulana Sentana Dharma Putra | Portofolio</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/image/logo.png">
     <!-- Google Fonts -->
@@ -294,29 +294,34 @@
             <div class="section-header reveal reveal-fade-up">
                 <h2 class="section-title">Mini <span class="highlight">Games</span></h2>
                 <div class="line"></div>
-                <p class="section-subtitle">Luangkan waktu sejenak untuk bermain. Mainkan Flappy MS (Kiri) atau Piano Neon (Kanan)!</p>
+                <p class="section-subtitle">Luangkan waktu sejenak untuk bermain. Mainkan Flappy MS (Kiri) atau Piano
+                    Neon (Kanan)!</p>
             </div>
-            
+
             <style>
                 .game-container {
-                    display: flex; 
-                    flex-wrap: wrap; 
-                    justify-content: center; 
-                    gap: 40px; 
-                    margin-top: 30px; 
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 40px;
+                    margin-top: 30px;
                     margin-bottom: 20px;
                 }
+
                 .game-wrapper {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     width: 100%;
-                    max-width: 320px; /* Limits the max width so it doesn't stretch */
+                    max-width: 320px;
+                    /* Limits the max width so it doesn't stretch */
                 }
+
                 #mini-game canvas {
                     max-width: 100%;
                     height: auto;
-                    touch-action: none; /* Prevent scrolling when tapping the game on mobile */
+                    touch-action: none;
+                    /* Prevent scrolling when tapping the game on mobile */
                 }
             </style>
 
@@ -324,13 +329,17 @@
                 <!-- Flappy MS -->
                 <div class="game-wrapper">
                     <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #70c5ce;">Flappy MS</h3>
-                    <canvas id="gameCanvas" width="320" height="480" style="background: #70c5ce; border-radius: 10px; border: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;"></canvas>
+                    <canvas id="gameCanvas" width="320" height="480"
+                        style="background: #70c5ce; border-radius: 10px; border: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;"></canvas>
                 </div>
-                
+
                 <!-- Piano Tiles -->
                 <div class="game-wrapper">
-                    <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #00f3ff; text-shadow: 0 0 10px #00f3ff;">Piano Neon</h3>
-                    <canvas id="pianoCanvas" width="320" height="480" style="background: #111; border-radius: 10px; border: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;"></canvas>
+                    <h3
+                        style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #00f3ff; text-shadow: 0 0 10px #00f3ff;">
+                        Piano Neon</h3>
+                    <canvas id="pianoCanvas" width="320" height="480"
+                        style="background: #111; border-radius: 10px; border: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;"></canvas>
                 </div>
             </div>
         </div>
@@ -373,39 +382,53 @@
     </footer>
 
     <!-- Enter Site Overlay (To allow audio autoplay) -->
-    <div id="enter-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; transition: opacity 0.5s ease;">
-        <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 20px; background: linear-gradient(45deg, #ff4757, #ffa502); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Welcome to Sentana Portfolio</h2>
-        <p style="margin-bottom: 30px; font-family: 'Inter', sans-serif; color: #ccc;">For the best immersive experience, please enable your audio.</p>
-        <button id="enter-btn" style="padding: 12px 30px; font-size: 1.1rem; background: transparent; border: 2px solid #ff4757; color: #ff4757; cursor: pointer; border-radius: 30px; transition: 0.3s; font-family: 'Outfit', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-            Explore Portfolio
+    <div id="enter-overlay"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; min-height: 100vh; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; transition: opacity 0.5s ease; padding: 20px; box-sizing: border-box; text-align: center;">
+        <h2
+            style="font-family: 'Outfit', sans-serif; font-size: clamp(1.8rem, 8vw, 3rem); margin-bottom: 20px; background: linear-gradient(45deg, #ff4757, #ffa502); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2;">
+            Welcome to Sentana Portofolio</h2>
+        <p style="margin-bottom: 30px; font-family: 'Inter', sans-serif; color: #ccc; font-size: clamp(0.9rem, 3vw, 1.1rem); max-width: 500px;">
+            For the best immersive experience, please enable your audio.</p>
+        <button id="enter-btn"
+            style="padding: 15px 40px; font-size: 1.1rem; background: transparent; border: 2px solid #ff4757; color: #ff4757; cursor: pointer; border-radius: 30px; transition: 0.3s; font-family: 'Outfit', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+            Explore Portofolio
         </button>
     </div>
 
     <!-- Audio Player Widget (Vinyl Style) -->
-    <div id="vinyl-player" class="spinning" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; cursor: pointer; width: 60px; height: 60px; border-radius: 50%; background: #111; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #333; overflow: hidden; transition: transform 0.2s ease;" title="Klik untuk Play/Pause">
+    <div id="vinyl-player" class="spinning"
+        style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; cursor: pointer; width: 60px; height: 60px; border-radius: 50%; background: #111; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #333; overflow: hidden; transition: transform 0.2s ease;"
+        title="Klik untuk Play/Pause">
         <!-- Vinyl Grooves -->
         <div style="position: absolute; width: 45px; height: 45px; border-radius: 50%; border: 1px solid #222;"></div>
         <div style="position: absolute; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #222;"></div>
         <!-- Vinyl Center Label -->
-        <div style="position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #ff4757; display: flex; align-items: center; justify-content: center;">
+        <div
+            style="position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #ff4757; display: flex; align-items: center; justify-content: center;">
             <div style="width: 4px; height: 4px; border-radius: 50%; background: #fff;"></div>
         </div>
     </div>
 
     <!-- Retro / Synthwave Background Music -->
     <audio id="bg-music" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=retro-80s-108156.mp3" type="audio/mpeg">
+        <source
+            src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=retro-80s-108156.mp3"
+            type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
     <style>
         @keyframes spin-vinyl {
-            100% { transform: rotate(360deg); }
+            100% {
+                transform: rotate(360deg);
+            }
         }
+
         .spinning {
             animation: spin-vinyl 4s linear infinite;
             animation-play-state: paused;
         }
+
         #enter-btn:hover {
             background: #ff4757;
             color: #fff !important;
@@ -414,7 +437,7 @@
     </style>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const music = document.getElementById("bg-music");
             const vinyl = document.getElementById("vinyl-player");
             const enterOverlay = document.getElementById("enter-overlay");
@@ -430,7 +453,7 @@
             }
 
             // Start everything when user clicks "Enter Site"
-            enterBtn.addEventListener("click", function() {
+            enterBtn.addEventListener("click", function () {
                 // Play music and lower its volume to balance with game/UI sounds
                 music.volume = 0.4;
                 const playPromise = music.play();
@@ -441,7 +464,7 @@
                         console.log("Audio play failed:", error);
                     });
                 }
-                
+
                 // Hide overlay
                 enterOverlay.style.opacity = "0";
                 setTimeout(() => {
@@ -450,7 +473,7 @@
             });
 
             // Toggle Play/Pause when clicking the vinyl
-            vinyl.addEventListener("click", function(e) {
+            vinyl.addEventListener("click", function (e) {
                 e.stopPropagation();
                 if (music.paused) {
                     music.play();
@@ -476,21 +499,21 @@
                     }
                     const osc = audioCtx.createOscillator();
                     const gainNode = audioCtx.createGain();
-                    
+
                     // Create a sharp, punchy "click/pop" sound (Louder & Crisper)
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(800, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.05);
-                    
+
                     gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
                     gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-                    
+
                     osc.connect(gainNode);
                     gainNode.connect(audioCtx.destination);
-                    
+
                     osc.start();
                     osc.stop(audioCtx.currentTime + 0.05);
-                } catch(e) {}
+                } catch (e) { }
             }
 
             const interactiveElements = document.querySelectorAll('button, a, .nav-item, .contact-item, .experience-card, .timeline-content');

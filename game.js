@@ -363,19 +363,24 @@
     }
 
     // Controls
-    canvas.addEventListener("click", () => {
-        switch(currentState) {
-            case 0:
-                currentState = 1;
-                bird.flap();
-                break;
-            case 1:
-                bird.flap();
-                break;
-            case 2:
-                resetGame();
-                currentState = 0;
-                break;
+    canvas.addEventListener("pointerdown", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const isVisible = (rect.top >= 0 && rect.bottom <= window.innerHeight);
+        if(isVisible) {
+            e.preventDefault(); // Prevents double firing on mobile
+            switch(currentState) {
+                case 0:
+                    currentState = 1;
+                    bird.flap();
+                    break;
+                case 1:
+                    bird.flap();
+                    break;
+                case 2:
+                    resetGame();
+                    currentState = 0;
+                    break;
+            }
         }
     });
 

@@ -227,6 +227,10 @@
             return;
         }
 
+        // Debounce tap to prevent double-firing
+        if (frames - (this.lastTapFrame || 0) < 5) return;
+        this.lastTapFrame = frames;
+
         // Play mode tap
         let clickedCol = Math.floor(x / colWidth);
         let hit = false;
@@ -249,7 +253,7 @@
                 score++;
                 bestScore = Math.max(score, bestScore);
                 localStorage.setItem("pianoBest", bestScore);
-                playNote(targetTile.col);
+                playNote();
                 hit = true;
             }
         }
@@ -261,24 +265,17 @@
         }
     }
 
-    canvas.addEventListener("mousedown", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        handleTap(x, y);
-    });
-
-    canvas.addEventListener("touchstart", (e) => {
+    canvas.addEventListener("pointerdown", (e) => {
         // Only prevent default if interacting with the game
         const rect = canvas.getBoundingClientRect();
         const isVisible = (rect.top >= 0 && rect.bottom <= window.innerHeight);
         if (isVisible) {
-            e.preventDefault();
-            const x = e.touches[0].clientX - rect.left;
-            const y = e.touches[0].clientY - rect.top;
+            e.preventDefault(); // Prevents double click from mobile browsers
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
             handleTap(x, y);
         }
-    }, {passive: false});
+    });
 
     // Start game loop
     resetGame();
