@@ -348,16 +348,17 @@
                 .arcade-carousel-container {
                     position: relative;
                     width: 100%;
-                    margin: 2rem 0;
-                    overflow: hidden;
+                    margin: 1rem 0;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    overflow: hidden;
                 }
 
                 .arcade-slider-wrapper {
                     position: relative;
                     width: 100%;
+                    max-width: 1200px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -367,21 +368,20 @@
                     display: flex;
                     overflow-x: auto;
                     width: 100%;
-                    max-width: 1100px;
                     scroll-behavior: smooth;
-                    gap: 1.5rem;
-                    padding: 20px;
+                    gap: 2rem;
+                    padding: 2rem 0;
                     scroll-snap-type: x mandatory;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
+                    /* Standard centering for flex items */
+                    justify-content: flex-start;
                 }
 
-                .arcade-slider::-webkit-scrollbar {
-                    display: none;
-                }
+                .arcade-slider::-webkit-scrollbar { display: none; }
 
                 .arcade-slider .game-wrapper {
-                    flex: 0 0 85%; /* Shows a peek of next game on mobile */
+                    flex: 0 0 280px; /* Fixed width for better control */
                     scroll-snap-align: center;
                     background: var(--bg-secondary);
                     padding: 2rem;
@@ -392,60 +392,60 @@
                     align-items: center;
                     transition: all 0.4s ease;
                     position: relative;
-                    box-sizing: border-box;
+                    /* Ensure items are centered in their own space */
+                    margin: 0 auto; 
                 }
 
-                @media (min-width: 768px) {
-                    .arcade-slider .game-wrapper {
-                        flex: 0 0 calc(50% - 1rem);
-                    }
-                }
-
-                @media (min-width: 1024px) {
+                /* Center items if they don't overflow */
+                @media (min-width: 950px) {
                     .arcade-slider {
                         justify-content: center;
-                        overflow: visible;
-                    }
-                    .arcade-slider .game-wrapper {
-                        flex: 0 0 320px;
                     }
                 }
 
-                /* Expanded Focus Mode */
-                .arcade-slider .game-wrapper.expanded {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    height: 100dvh;
-                    z-index: 10000;
-                    background: #000;
-                    padding: 0; /* Remove padding to maximize space */
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    animation: zoomIn 0.3s ease;
+                /* Fullscreen Focus Mode */
+                .game-wrapper.expanded {
+                    position: fixed !important;
+                    inset: 0 !important;
+                    width: 100vw !important;
+                    height: 100dvh !important;
+                    z-index: 100000 !important;
+                    background: rgba(0, 0, 0, 0.95) !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    border: none !important;
+                    border-radius: 0 !important;
+                    animation: zoomIn 0.3s ease-out;
                 }
 
                 .game-wrapper.expanded h3 {
                     position: absolute;
-                    top: 20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    margin: 0 !important;
-                    font-size: 1rem !important;
-                    pointer-events: none;
-                    opacity: 0.7;
+                    top: 5vh;
+                    font-size: 1.2rem !important;
+                    color: #fff;
+                    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+                    z-index: 100001;
+                }
+
+                .game-wrapper.expanded canvas {
+                    max-width: 90vw !important;
+                    max-height: 75vh !important;
+                    height: auto !important;
+                    width: auto !important;
+                    box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+                    border: 2px solid rgba(255,255,255,0.1);
                 }
 
                 .close-game {
                     position: absolute;
-                    top: 15px;
-                    right: 15px;
-                    width: 40px;
-                    height: 40px;
+                    top: 20px;
+                    right: 20px;
+                    width: 45px;
+                    height: 45px;
                     background: #ff4757;
                     border: none;
                     border-radius: 50%;
@@ -454,45 +454,25 @@
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
-                    z-index: 10005;
-                    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+                    z-index: 100005;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
                 }
 
-                .game-wrapper.expanded .close-game {
-                    display: flex;
-                }
-
-                #pianoCanvas, #gameCanvas, #mahjongCanvas {
-                    width: 100%;
-                    max-width: 320px;
-                    height: auto;
-                    aspect-ratio: 2/3;
-                    border-radius: 12px;
-                    background: #000;
-                    cursor: crosshair;
-                }
-
-                .game-wrapper.expanded canvas {
-                    max-width: 95vw !important;
-                    max-height: 85vh !important;
-                    width: auto !important;
-                    height: auto !important;
-                    border: none !important;
-                    box-shadow: 0 0 50px rgba(255,255,255,0.05);
-                }
+                .game-wrapper.expanded .close-game { display: flex; }
 
                 .carousel-control {
                     position: absolute;
                     top: 50%;
                     transform: translateY(-50%);
-                    width: 45px;
-                    height: 45px;
-                    background: var(--bg-primary);
-                    border: 1px solid var(--glass-border);
+                    width: 50px;
+                    height: 50px;
+                    background: rgba(255,255,255,0.05);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255,255,255,0.1);
                     color: #fff;
                     border-radius: 50%;
                     cursor: pointer;
-                    z-index: 50;
+                    z-index: 100;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -500,30 +480,33 @@
                 }
 
                 .carousel-control:hover { background: var(--primary-color); }
-                .prev { left: 10px; }
-                .next { right: 10px; }
+                .prev { left: 0; }
+                .next { right: 0; }
 
                 @media (max-width: 1024px) {
-                    .carousel-control { display: none; } /* Use touch on mobile/tablet */
+                    .carousel-control { display: none; }
                 }
 
                 .carousel-dots {
                     display: flex;
-                    gap: 8px;
-                    margin-top: 15px;
+                    gap: 10px;
+                    margin-top: 10px;
+                    justify-content: center;
+                    width: 100%;
                 }
 
                 .dot {
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 4px;
-                    background: rgba(255,255,255,0.2);
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 5px;
+                    background: rgba(255,255,255,0.1);
+                    cursor: pointer;
                     transition: 0.3s;
                 }
 
                 .dot.active {
                     background: var(--primary-color);
-                    width: 20px;
+                    width: 30px;
                 }
             </style>
 
