@@ -1016,6 +1016,10 @@ ul {
 }
 
 @media screen and (max-width: 768px) {
+    .container {
+        padding: 0 1.2rem;
+    }
+    
     .section {
         padding: 5rem 0;
     }
@@ -1025,8 +1029,10 @@ ul {
     }
     
     .img-wrapper.vintage-glass-border {
-        width: 280px;
-        height: 350px;
+        width: 90%;
+        max-width: 280px;
+        height: auto;
+        aspect-ratio: 4 / 5;
     }
 
     .stats-container {
@@ -1084,5 +1090,24 @@ ul {
     .contact-item {
         width: 100%;
         justify-content: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero-btns {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .hero-btns .btn {
+        width: 100%;
+    }
+    
+    .hero-text .title {
+        font-size: clamp(2rem, 12vw, 2.5rem);
+    }
+    
+    .container {
+        padding: 0 1rem;
     }
 }

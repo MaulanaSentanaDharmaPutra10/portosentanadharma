@@ -20,6 +20,19 @@
 </head>
 
 <body>
+    <!-- Enter Site Overlay (To allow audio autoplay) -->
+    <div id="enter-overlay"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; height: 100dvh; background: #0a0a0a; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; transition: opacity 0.5s ease; padding: 30px; box-sizing: border-box; text-align: center;">
+        <h2
+            style="font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 20px; background: linear-gradient(45deg, #ff4757, #ffa502); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; font-weight: 900;">
+            Welcome to Sentana Portofolio</h2>
+        <p style="margin-bottom: 40px; font-family: 'Inter', sans-serif; color: #ccc; font-size: clamp(1rem, 4vw, 1.2rem); max-width: 450px; line-height: 1.6;">
+            For the best immersive experience, please enable your audio.</p>
+        <button id="enter-btn"
+            style="padding: 18px 45px; font-size: 1.1rem; background: #ff4757; color: #fff; border: none; cursor: pointer; border-radius: 50px; transition: 0.3s; font-family: 'Outfit', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);">
+            Explore Portofolio
+        </button>
+    </div>
 
 
 
@@ -381,19 +394,7 @@
         </div>
     </footer>
 
-    <!-- Enter Site Overlay (To allow audio autoplay) -->
-    <div id="enter-overlay"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; min-height: 100vh; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; transition: opacity 0.5s ease; padding: 20px; box-sizing: border-box; text-align: center;">
-        <h2
-            style="font-family: 'Outfit', sans-serif; font-size: clamp(1.8rem, 8vw, 3rem); margin-bottom: 20px; background: linear-gradient(45deg, #ff4757, #ffa502); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2;">
-            Welcome to Sentana Portofolio</h2>
-        <p style="margin-bottom: 30px; font-family: 'Inter', sans-serif; color: #ccc; font-size: clamp(0.9rem, 3vw, 1.1rem); max-width: 500px;">
-            For the best immersive experience, please enable your audio.</p>
-        <button id="enter-btn"
-            style="padding: 15px 40px; font-size: 1.1rem; background: transparent; border: 2px solid #ff4757; color: #ff4757; cursor: pointer; border-radius: 30px; transition: 0.3s; font-family: 'Outfit', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-            Explore Portofolio
-        </button>
-    </div>
+
 
     <!-- Audio Player Widget (Vinyl Style) -->
     <div id="vinyl-player" class="spinning"
@@ -452,8 +453,14 @@
                 }
             }
 
+            // Prevent scroll while overlay is active
+            document.body.style.overflow = "hidden";
+
             // Start everything when user clicks "Enter Site"
             enterBtn.addEventListener("click", function () {
+                // Restore scroll
+                document.body.style.overflow = "auto";
+
                 // Play music and lower its volume to balance with game/UI sounds
                 music.volume = 0.4;
                 const playPromise = music.play();
