@@ -12,9 +12,6 @@
     let currentState = 0; // 0: get ready, 1: play, 2: game over
     let animationId;
 
-    // Start loop immediately
-    loop();
-
     // Game Objects
     const bird = {
         x: 50,
@@ -231,4 +228,7 @@
             }
         }
     });
+
+    // Start game loop
+    loop();
 })();
