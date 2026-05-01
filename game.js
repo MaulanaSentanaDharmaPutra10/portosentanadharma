@@ -377,10 +377,14 @@
 
     // Controls
     canvas.addEventListener("pointerdown", (e) => {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        
         const rect = canvas.getBoundingClientRect();
         const isVisible = (rect.top < window.innerHeight && rect.bottom > 0);
+        
         if(isVisible) {
             e.preventDefault(); 
+            // Scaling logic (not strictly needed for flappy but good for consistency)
             switch(currentState) {
                 case 0:
                     resetGame();

@@ -168,10 +168,9 @@
                 ctx.lineWidth = 1;
             }
 
-            // Rounded Rect
-            const r = 5;
+            // Rect
             ctx.beginPath();
-            ctx.roundRect(t.x, t.y, tileW, tileH, r);
+            ctx.rect(t.x, t.y, tileW, tileH);
             ctx.fill();
             ctx.stroke();
 

@@ -344,13 +344,17 @@
     }
 
     canvas.addEventListener("pointerdown", (e) => {
-        // Only prevent default if interacting with the game
         const rect = canvas.getBoundingClientRect();
-        const isVisible = (rect.top >= 0 && rect.bottom <= window.innerHeight);
+        // Relax visibility check to work while scrolling
+        const isVisible = (rect.top < window.innerHeight && rect.bottom > 0);
+        
         if (isVisible) {
-            e.preventDefault(); // Prevents double click from mobile browsers
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            e.preventDefault(); 
+            // Correct scaling for responsive canvas
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
             handleTap(x, y);
         }
     });
