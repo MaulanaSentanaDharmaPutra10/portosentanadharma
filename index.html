@@ -351,19 +351,30 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    max-width: 1000px;
-                    margin: 0.5rem auto;
+                    width: 100%;
+                    margin: 1rem 0;
                 }
 
                 .arcade-slider {
                     display: flex;
-                    overflow: hidden;
+                    overflow-x: auto;
                     width: 100%;
                     scroll-behavior: smooth;
                     gap: 2rem;
-                    padding: 1rem;
+                    padding: 1.5rem;
                     justify-content: flex-start;
                     scroll-snap-type: x mandatory;
+                    scrollbar-width: none; /* Hide scrollbar Firefox */
+                }
+
+                .arcade-slider::-webkit-scrollbar {
+                    display: none; /* Hide scrollbar Chrome/Safari */
+                }
+
+                @media (min-width: 1024px) {
+                    .arcade-slider {
+                        justify-content: center;
+                    }
                 }
 
                 .arcade-slider .game-wrapper {
