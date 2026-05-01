@@ -44,44 +44,45 @@
         // Shuffle symbols
         availableSymbols.sort(() => Math.random() - 0.5);
 
-        // Simple Layout (3 layers)
-        // Layer 0: 6x6 grid
+        // Realistic Turtle-ish Layout
         let idx = 0;
+        // Base Level 0: Large rectangle with gaps
         for (let r = 0; r < 6; r++) {
-            for (let c = 0; c < 6; c++) {
-                tiles.push({
-                    x: 40 + c * (tileW + 5),
-                    y: 80 + r * (tileH + 5),
-                    z: 0,
-                    symbol: availableSymbols[idx++],
-                    removed: false,
-                    row: r, col: c
-                });
+            for (let c = 0; c < 8; c++) {
+                if (idx < availableSymbols.length) {
+                    tiles.push({
+                        x: 15 + c * (tileW + 2),
+                        y: 80 + r * (tileH + 2),
+                        z: 0,
+                        symbol: availableSymbols[idx++],
+                        removed: false
+                    });
+                }
             }
         }
-        // Layer 1: 4x4 grid centered
+        // Level 1: Smaller rectangle
         for (let r = 1; r < 5; r++) {
-            for (let c = 1; c < 5; c++) {
-                tiles.push({
-                    x: 40 + c * (tileW + 5) + 5,
-                    y: 80 + r * (tileH + 5) + 5,
-                    z: 1,
-                    symbol: availableSymbols[idx++],
-                    removed: false,
-                    row: r, col: c
-                });
+            for (let c = 2; c < 6; c++) {
+                if (idx < availableSymbols.length) {
+                    tiles.push({
+                        x: 15 + c * (tileW + 2) + 4,
+                        y: 80 + r * (tileH + 2) + 4,
+                        z: 1,
+                        symbol: availableSymbols[idx++],
+                        removed: false
+                    });
+                }
             }
         }
-        // Layer 2: 2x2 grid centered
-        for (let r = 2; r < 4; r++) {
-            for (let c = 2; c < 4; c++) {
+        // Level 2: Top cap
+        for (let i = 0; i < 8; i++) {
+            if (idx < availableSymbols.length) {
                 tiles.push({
-                    x: 40 + c * (tileW + 5) + 10,
-                    y: 80 + r * (tileH + 5) + 10,
+                    x: 15 + (3 + (i%2)) * (tileW + 2) + 8,
+                    y: 80 + (2 + Math.floor(i/2)) * (tileH + 2) + 8,
                     z: 2,
                     symbol: availableSymbols[idx++],
-                    removed: false,
-                    row: r, col: c
+                    removed: false
                 });
             }
         }
@@ -151,6 +152,13 @@
             let isTileFree = isFree(t);
             
             ctx.save();
+            // Tile Base (3D Side)
+            ctx.fillStyle = "#0a0a0a";
+            ctx.fillRect(t.x + 4, t.y + 4, tileW, tileH); // Depth shadow
+
+            // Top Face
+            ctx.fillStyle = isTileFree ? "#1a1a1a" : "#0d0d0d";
+            
             // Optimize shadows (only for selected tile)
             if (selectedTile === t) {
                 ctx.shadowBlur = 15;
@@ -158,8 +166,8 @@
                 ctx.strokeStyle = "#f59e0b";
                 ctx.lineWidth = 2;
             } else {
-                ctx.shadowBlur = 0; // Disable shadows for normal tiles
-                ctx.strokeStyle = isTileFree ? "#f59e0b44" : "#333";
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = isTileFree ? "#f59e0b66" : "#333";
                 ctx.lineWidth = 1;
             }
 
@@ -168,6 +176,10 @@
             ctx.rect(t.x, t.y, tileW, tileH);
             ctx.fill();
             ctx.stroke();
+
+            // Bevel effect
+            ctx.strokeStyle = "rgba(255,255,255,0.05)";
+            ctx.strokeRect(t.x + 2, t.y + 2, tileW - 4, tileH - 4);
 
             // Symbol
             ctx.fillStyle = isTileFree ? "#fff" : "#444";

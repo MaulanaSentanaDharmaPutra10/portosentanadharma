@@ -134,20 +134,34 @@
             ctx.translate(this.x, this.y);
             ctx.rotate(this.rotation);
             
-            // Simplified Bird Rendering (less shadows)
+            // Neon Bird Body
             ctx.fillStyle = "#ff00e4";
-            ctx.shadowBlur = 5;
+            ctx.shadowBlur = 10;
             ctx.shadowColor = "#ff00e4";
+            
+            // Main body
             ctx.beginPath();
-            ctx.roundRect(-this.w/2, -this.h/2, this.w, this.h, 5);
+            ctx.roundRect(-this.w/2, -this.h/2, this.w, this.h, 8);
             ctx.fill();
+            
+            // Wing (Animated)
+            ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+            let wingY = Math.sin(frames * 0.2) * 5;
+            ctx.fillRect(-this.w/2, wingY, this.w/2 + 2, 3);
             
             // Eye
             ctx.fillStyle = "#fff";
-            ctx.fillStyle = "#f16723";
             ctx.beginPath();
-            ctx.moveTo(8, 0); ctx.lineTo(18, 2); ctx.lineTo(8, 6);
-            ctx.fill(); ctx.stroke();
+            ctx.arc(this.w/4, -this.h/4, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Beak
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath();
+            ctx.moveTo(this.w/2, -2);
+            ctx.lineTo(this.w/2 + 10, 2);
+            ctx.lineTo(this.w/2, 6);
+            ctx.fill();
 
             ctx.restore();
         },
