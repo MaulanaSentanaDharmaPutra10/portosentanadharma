@@ -148,6 +148,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentIndex = index;
                 updateDots(currentIndex);
             }
+        // Expand/Minimize Game Logic
+        const gameWrappers = document.querySelectorAll('.arcade-slider .game-wrapper');
+        
+        gameWrappers.forEach(wrapper => {
+            const canvas = wrapper.querySelector('canvas');
+            const closeBtn = wrapper.querySelector('.close-game');
+
+            canvas.addEventListener('click', (e) => {
+                if (!wrapper.classList.contains('expanded')) {
+                    // Only expand if not already expanded
+                    wrapper.classList.add('expanded');
+                    document.body.style.overflow = 'hidden'; // Lock scroll
+                }
+            });
+
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                wrapper.classList.remove('expanded');
+                document.body.style.overflow = 'auto'; // Restore scroll
+            });
         });
     }
 
