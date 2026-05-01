@@ -99,4 +99,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Arcade Carousel Logic
+    const arcadeSlider = document.getElementById('arcadeSlider');
+    const prevBtn = document.getElementById('gamePrev');
+    const nextBtn = document.getElementById('gameNext');
+    const dots = document.querySelectorAll('.dot');
+    
+    if (arcadeSlider) {
+        let currentIndex = 0;
+        const gameCount = document.querySelectorAll('.arcade-slider .game-wrapper').length;
+
+        const updateDots = (index) => {
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        };
+
+        const scrollToGame = (index) => {
+            const scrollAmount = arcadeSlider.clientWidth * index;
+            arcadeSlider.scrollTo({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+            updateDots(index);
+        };
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % gameCount;
+            scrollToGame(currentIndex);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + gameCount) % gameCount;
+            scrollToGame(currentIndex);
+        });
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                scrollToGame(currentIndex);
+            });
+        });
+
+        // Update dots on scroll (for mobile touch)
+        arcadeSlider.addEventListener('scroll', () => {
+            const index = Math.round(arcadeSlider.scrollLeft / arcadeSlider.clientWidth);
+            if (index !== currentIndex) {
+                currentIndex = index;
+                updateDots(currentIndex);
+            }
+        });
+    }
+
 });

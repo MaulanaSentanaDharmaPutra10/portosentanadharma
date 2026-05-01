@@ -310,37 +310,65 @@
                 <p class="section-subtitle">Istirahat sejenak dengan permainan arcade retro bertema Synthwave.</p>
             </div>
 
-            <div class="game-container reveal reveal-fade-up">
-                <div class="game-wrapper">
-                    <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #ff00e4; text-shadow: 0 0 10px #ff00e4; font-weight: 800;">
-                        FLAPPY MS</h3>
-                    <canvas id="gameCanvas" width="320" height="480" 
-                        style="border: 2px solid #ff00e4; box-shadow: 0 0 20px rgba(255, 0, 228, 0.3); border-radius: 10px;"></canvas>
+            <div class="arcade-carousel-container reveal reveal-fade-up">
+                <button class="carousel-control prev" id="gamePrev"><i class="fas fa-chevron-left"></i></button>
+                
+                <div class="arcade-slider" id="arcadeSlider">
+                    <div class="game-wrapper">
+                        <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #ff00e4; text-shadow: 0 0 10px #ff00e4; font-weight: 800;">
+                            FLAPPY MS</h3>
+                        <canvas id="gameCanvas" width="320" height="480" 
+                            style="border: 2px solid #ff00e4; box-shadow: 0 0 20px rgba(255, 0, 228, 0.3); border-radius: 10px;"></canvas>
+                    </div>
+                    <div class="game-wrapper">
+                        <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #f59e0b; text-shadow: 0 0 10px #f59e0b; font-weight: 800;">
+                            MAHJONG NEON</h3>
+                        <canvas id="mahjongCanvas" width="320" height="480" 
+                            style="border: 2px solid #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); border-radius: 10px;"></canvas>
+                    </div>
+                    <div class="game-wrapper">
+                        <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #00f3ff; text-shadow: 0 0 10px #00f3ff; font-weight: 800;">
+                            PIANO NEON</h3>
+                        <canvas id="pianoCanvas" width="320" height="480" 
+                            style="border: 2px solid #00f3ff; box-shadow: 0 0 20px rgba(0, 243, 255, 0.3); border-radius: 10px;"></canvas>
+                    </div>
                 </div>
-                <div class="game-wrapper">
-                    <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #f59e0b; text-shadow: 0 0 10px #f59e0b; font-weight: 800;">
-                        MAHJONG NEON</h3>
-                    <canvas id="mahjongCanvas" width="320" height="480" 
-                        style="border: 2px solid #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); border-radius: 10px;"></canvas>
-                </div>
-                <div class="game-wrapper">
-                    <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #00f3ff; text-shadow: 0 0 10px #00f3ff; font-weight: 800;">
-                        PIANO NEON</h3>
-                    <canvas id="pianoCanvas" width="320" height="480" 
-                        style="border: 2px solid #00f3ff; box-shadow: 0 0 20px rgba(0, 243, 255, 0.3); border-radius: 10px;"></canvas>
-                </div>
+
+                <button class="carousel-control next" id="gameNext"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="carousel-dots" id="carouselDots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
             </div>
             <style>
-                .game-container {
+                .arcade-carousel-container {
+                    position: relative;
                     display: flex;
+                    align-items: center;
                     justify-content: center;
-                    gap: 3rem;
-                    flex-wrap: wrap;
-                    margin-top: 2rem;
+                    max-width: 1000px;
+                    margin: 2rem auto;
                 }
 
-                .game-wrapper {
-                    text-align: center;
+                .arcade-slider {
+                    display: flex;
+                    overflow: hidden;
+                    width: 100%;
+                    scroll-behavior: smooth;
+                    gap: 2rem;
+                    padding: 1rem;
+                    justify-content: flex-start;
+                    scroll-snap-type: x mandatory;
+                }
+
+                .arcade-slider .game-wrapper {
+                    flex: 0 0 100%;
+                    scroll-snap-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
                     background: rgba(255, 255, 255, 0.02);
                     padding: 2rem;
                     border-radius: 20px;
@@ -348,16 +376,66 @@
                     transition: transform 0.3s ease;
                 }
 
-                .game-wrapper:hover {
-                    transform: translateY(-10px);
-                    background: rgba(255, 255, 255, 0.04);
+                @media (min-width: 768px) {
+                    .arcade-slider .game-wrapper {
+                        flex: 0 0 calc(50% - 1rem);
+                    }
                 }
 
-                #mini-game canvas, #pianoCanvas, #gameCanvas {
+                @media (min-width: 1024px) {
+                    .arcade-slider .game-wrapper {
+                        flex: 0 0 calc(33.333% - 1.33rem);
+                    }
+                }
+
+                .carousel-control {
+                    background: var(--bg-secondary);
+                    color: #fff;
+                    border: 1px solid var(--glass-border);
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                    z-index: 10;
+                    box-shadow: var(--glass-shadow);
+                }
+
+                .carousel-control:hover {
+                    background: var(--primary-color);
+                    border-color: var(--primary-color);
+                    transform: scale(1.1);
+                }
+
+                .carousel-dots {
+                    display: flex;
+                    justify-content: center;
+                    gap: 10px;
+                    margin-top: 1rem;
+                }
+
+                .dot {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.2);
+                    cursor: pointer;
+                    transition: 0.3s;
+                }
+
+                .dot.active {
+                    background: var(--primary-color);
+                    width: 25px;
+                    border-radius: 10px;
+                }
+
+                #pianoCanvas, #gameCanvas, #mahjongCanvas {
                     max-width: 100%;
                     height: auto;
                     touch-action: none;
-                    cursor: crosshair;
                 }
             </style>
 
