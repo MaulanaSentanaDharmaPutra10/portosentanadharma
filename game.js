@@ -1,11 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const gameBtn = document.getElementById("game-btn");
-    const gameModal = document.getElementById("game-modal");
-    const closeBtn = document.getElementById("close-game");
     const canvas = document.getElementById("gameCanvas");
     
     // Ensure elements exist
-    if(!gameBtn || !gameModal || !canvas) return;
+    if(!canvas) return;
     
     const ctx = canvas.getContext("2d");
 
@@ -15,18 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentState = 0; // 0: get ready, 1: play, 2: game over
     let animationId;
 
-    // Open/Close Modal
-    gameBtn.addEventListener("click", () => {
-        gameModal.style.display = "flex";
-        resetGame();
-        currentState = 0;
-        loop();
-    });
-
-    closeBtn.addEventListener("click", () => {
-        gameModal.style.display = "none";
-        cancelAnimationFrame(animationId);
-    });
+    // Start loop immediately
+    loop();
 
     // Game Objects
     const bird = {
@@ -197,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function loop() {
-        if(gameModal.style.display === "none") return;
         update();
         draw();
         frames++;
@@ -223,20 +209,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Support Spacebar
     window.addEventListener("keydown", (e) => {
-        if(e.code === "Space" && gameModal.style.display !== "none") {
-            e.preventDefault();
-            switch(currentState) {
-                case 0:
-                    currentState = 1;
-                    bird.flap();
-                    break;
-                case 1:
-                    bird.flap();
-                    break;
-                case 2:
-                    resetGame();
-                    currentState = 0;
-                    break;
+        if(e.code === "Space") {
+            // Prevent default page scroll only if hovering over or interacting with game
+            const rect = canvas.getBoundingClientRect();
+            const isVisible = (rect.top >= 0 && rect.bottom <= window.innerHeight);
+            if(isVisible) {
+                e.preventDefault();
+                switch(currentState) {
+                    case 0:
+                        currentState = 1;
+                        bird.flap();
+                        break;
+                    case 1:
+                        bird.flap();
+                        break;
+                    case 2:
+                        resetGame();
+                        currentState = 0;
+                        break;
+                }
             }
         }
     });
