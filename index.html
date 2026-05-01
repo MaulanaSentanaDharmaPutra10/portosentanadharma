@@ -302,39 +302,56 @@
     </section>
 
     <!-- Mini Game Section -->
-    <section id="mini-game" class="section">
+    <section id="games" class="mini-game section highlight-bg">
         <div class="container">
             <div class="section-header reveal reveal-fade-up">
-                <h2 class="section-title">Mini <span class="highlight">Games</span></h2>
+                <h2 class="section-title">Arcade <span class="highlight">Zone</span></h2>
                 <div class="line"></div>
-                <p class="section-subtitle">Luangkan waktu sejenak untuk bermain. Mainkan Flappy MS (Kiri) atau Piano
-                    Neon (Kanan)!</p>
+                <p class="section-subtitle">Istirahat sejenak dengan permainan arcade retro bertema Synthwave.</p>
             </div>
 
+            <div class="game-container reveal reveal-fade-up">
+                <div class="game-wrapper">
+                    <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #00f3ff; text-shadow: 0 0 10px #00f3ff; font-weight: 800;">
+                        PIANO NEON</h3>
+                    <canvas id="pianoCanvas" width="320" height="480" 
+                        style="border: 2px solid #00f3ff; box-shadow: 0 0 20px rgba(0, 243, 255, 0.3); border-radius: 10px;"></canvas>
+                </div>
+                <div class="game-wrapper">
+                    <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #ff00e4; text-shadow: 0 0 10px #ff00e4; font-weight: 800;">
+                        FLAPPY MS</h3>
+                    <canvas id="gameCanvas" width="320" height="480" 
+                        style="border: 2px solid #ff00e4; box-shadow: 0 0 20px rgba(255, 0, 228, 0.3); border-radius: 10px;"></canvas>
+                </div>
+            </div>
             <style>
                 .game-container {
                     display: flex;
-                    flex-wrap: wrap;
                     justify-content: center;
-                    gap: 40px;
-                    margin-top: 30px;
-                    margin-bottom: 20px;
+                    gap: 3rem;
+                    flex-wrap: wrap;
+                    margin-top: 2rem;
                 }
 
                 .game-wrapper {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    width: 100%;
-                    max-width: 320px;
-                    /* Limits the max width so it doesn't stretch */
+                    text-align: center;
+                    background: rgba(255, 255, 255, 0.02);
+                    padding: 2rem;
+                    border-radius: 20px;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    transition: transform 0.3s ease;
                 }
 
-                #mini-game canvas {
+                .game-wrapper:hover {
+                    transform: translateY(-10px);
+                    background: rgba(255, 255, 255, 0.04);
+                }
+
+                #mini-game canvas, #pianoCanvas, #gameCanvas {
                     max-width: 100%;
                     height: auto;
                     touch-action: none;
-                    /* Prevent scrolling when tapping the game on mobile */
+                    cursor: crosshair;
                 }
             </style>
 

@@ -46,115 +46,109 @@
         } catch(e) {}
     }
 
-    // Parallax Background
+    let screenShake = 0;
+
+    // Synthwave Background
     const bg = {
         x: 0,
         draw() {
-            // Sky gradient
+            // Dark Space Gradient
             let grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            grd.addColorStop(0, "#4ec0ca");
-            grd.addColorStop(1, "#8ee5e8");
+            grd.addColorStop(0, "#050505");
+            grd.addColorStop(0.5, "#1a0a2e");
+            grd.addColorStop(1, "#2a0a2e");
             ctx.fillStyle = grd;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Clouds
-            ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-            let cloudX1 = (this.x * 0.3 + 50) % (canvas.width + 100) - 50;
-            let cloudX2 = (this.x * 0.3 + 200) % (canvas.width + 100) - 50;
-            
-            ctx.beginPath();
-            ctx.arc(cloudX1, 100, 30, 0, Math.PI * 2);
-            ctx.arc(cloudX1 + 30, 100, 40, 0, Math.PI * 2);
-            ctx.arc(cloudX1 + 60, 100, 30, 0, Math.PI * 2);
-            ctx.fill();
+            // Neon Grid Floor
+            ctx.strokeStyle = "rgba(0, 243, 255, 0.1)";
+            ctx.lineWidth = 1;
+            let gridX = this.x % 40;
+            for(let i = gridX; i < canvas.width; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(i, canvas.height - 50);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            for(let i = canvas.height - 50; i < canvas.height; i += 10) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
 
-            ctx.beginPath();
-            ctx.arc(cloudX2, 150, 20, 0, Math.PI * 2);
-            ctx.arc(cloudX2 + 25, 150, 30, 0, Math.PI * 2);
-            ctx.arc(cloudX2 + 50, 150, 20, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Cityscape / Hills
-            ctx.fillStyle = "#6cb8ad";
-            let cityX = this.x * 0.6;
-            for(let i=0; i<3; i++) {
-                let offset = i * 200;
-                ctx.fillRect((cityX + offset) % (canvas.width + 200) - 100, canvas.height - 150, 60, 100);
-                ctx.fillRect((cityX + 70 + offset) % (canvas.width + 200) - 100, canvas.height - 180, 50, 130);
-                ctx.fillRect((cityX + 130 + offset) % (canvas.width + 200) - 100, canvas.height - 120, 80, 70);
+            // Neon Mountains (Parallax)
+            ctx.fillStyle = "rgba(255, 0, 228, 0.05)";
+            let mountX = (this.x * 0.2) % 400;
+            for(let i = -1; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(mountX + i * 400, canvas.height - 50);
+                ctx.lineTo(mountX + i * 400 + 200, canvas.height - 200);
+                ctx.lineTo(mountX + i * 400 + 400, canvas.height - 50);
+                ctx.fill();
             }
         },
         update() {
-            if (currentState === 1) this.x -= 1;
+            if (currentState === 1) this.x -= 0.5;
         }
     };
 
-    // Moving Floor
+    // Neon Floor
     const floor = {
         x: 0,
         draw() {
-            // Dirt base
-            ctx.fillStyle = "#ded895";
+            ctx.fillStyle = "#0a0a0a";
             ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
             
-            // Grass top
-            ctx.fillStyle = "#73bf2e";
-            ctx.fillRect(0, canvas.height - 50, canvas.width, 10);
-            
-            // Floor scrolling stripes
-            ctx.strokeStyle = "#c4be7a";
+            // Neon Line
+            ctx.strokeStyle = "#00f3ff";
             ctx.lineWidth = 3;
-            for(let i=0; i<canvas.width + 50; i+=20) {
-                ctx.beginPath();
-                ctx.moveTo(i + this.x, canvas.height - 40);
-                ctx.lineTo(i + this.x - 15, canvas.height);
-                ctx.stroke();
-            }
-            
-            // Top border
-            ctx.strokeStyle = "#555";
-            ctx.lineWidth = 2;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#00f3ff";
             ctx.beginPath();
             ctx.moveTo(0, canvas.height - 50);
             ctx.lineTo(canvas.width, canvas.height - 50);
             ctx.stroke();
+            ctx.shadowBlur = 0;
         },
         update() {
             if (currentState === 1) {
                 this.x -= 2;
-                if (this.x <= -20) this.x = 0;
+                if (this.x <= -40) this.x = 0;
             }
         }
     };
 
     const bird = {
-        x: 50,
+        x: 60,
         y: 150,
         radius: 12,
         velocity: 0,
         gravity: 0.25,
-        jump: 4.6,
+        jump: 4.8,
         draw() {
             ctx.save();
             ctx.translate(this.x, this.y);
             
-            // Rotation based on velocity
-            let rotation = 0;
-            if (currentState === 1) {
-                rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (this.velocity * 0.1)));
-            }
+            let rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (this.velocity * 0.1)));
             ctx.rotate(rotation);
 
-            // Body
+            // Neon Glow
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#f3c500";
+
+            // Body (Retro Yellow)
             ctx.fillStyle = "#f3c500";
             ctx.beginPath();
             ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
             ctx.fill();
-            ctx.strokeStyle = "#543847";
+            
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = "#000";
             ctx.lineWidth = 2;
             ctx.stroke();
 
-            // Wing (animates when playing)
+            // Wing
             let flapY = (currentState === 1 && frames % 10 < 5) ? -3 : 0;
             ctx.fillStyle = "#fff";
             ctx.beginPath();
@@ -164,22 +158,15 @@
 
             // Eye
             ctx.fillStyle = "#fff";
-            ctx.beginPath();
-            ctx.arc(4, -4, 4, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(4, -4, 4, 0, Math.PI * 2); ctx.fill();
             ctx.fillStyle = "#000";
-            ctx.beginPath();
-            ctx.arc(5, -4, 1.5, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(5, -4, 1.5, 0, Math.PI * 2); ctx.fill();
 
             // Beak
             ctx.fillStyle = "#f16723";
             ctx.beginPath();
-            ctx.moveTo(8, 0);
-            ctx.lineTo(18, 2);
-            ctx.lineTo(8, 6);
-            ctx.fill();
-            ctx.stroke();
+            ctx.moveTo(8, 0); ctx.lineTo(18, 2); ctx.lineTo(8, 6);
+            ctx.fill(); ctx.stroke();
 
             ctx.restore();
         },
@@ -188,20 +175,20 @@
                 this.velocity += this.gravity;
                 this.y += this.velocity;
                 
-                // Floor collision
                 if (this.y + this.radius >= canvas.height - 50) {
                     this.y = canvas.height - 50 - this.radius;
-                    if(currentState === 1) playSound('hit');
-                    currentState = 2; // Game Over
+                    if(currentState === 1) {
+                        playSound('hit');
+                        screenShake = 10;
+                    }
+                    currentState = 2;
                 }
-                // Ceiling collision
                 if (this.y - this.radius <= 0) {
                     this.y = this.radius;
                     this.velocity = 0;
                 }
             } else if (currentState === 0) {
-                // Hover effect before starting
-                this.y = 150 + Math.cos(frames / 10) * 5;
+                this.y = 150 + Math.cos(frames / 10) * 8;
             }
         },
         flap() {
@@ -212,40 +199,35 @@
 
     const pipes = {
         position: [],
-        width: 50,
-        gap: 120,
-        dx: 2,
+        width: 55,
+        gap: 130,
+        dx: 2.5,
         draw() {
             for (let i = 0; i < this.position.length; i++) {
                 let p = this.position[i];
-                let topY = p.y;
-                let bottomY = p.y + this.gap;
-
-                // Pipe gradient
+                
+                // Neon Pipe Gradient
                 let pGrd = ctx.createLinearGradient(p.x, 0, p.x + this.width, 0);
-                pGrd.addColorStop(0, "#528c1c");
-                pGrd.addColorStop(0.5, "#74bf2e");
-                pGrd.addColorStop(1, "#528c1c");
+                pGrd.addColorStop(0, "#ff00e4");
+                pGrd.addColorStop(0.5, "#ff70f3");
+                pGrd.addColorStop(1, "#ff00e4");
 
                 ctx.fillStyle = pGrd;
-                ctx.strokeStyle = "#2e5c0a";
-                ctx.lineWidth = 2;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = "#ff00e4";
 
-                // Top Pipe Body
-                ctx.fillRect(p.x + 2, 0, this.width - 4, topY - 20);
-                ctx.strokeRect(p.x + 2, 0, this.width - 4, topY - 20);
+                // Top Pipe
+                ctx.fillRect(p.x, 0, this.width, p.y);
+                ctx.strokeStyle = "#fff";
+                ctx.lineWidth = 1;
+                ctx.strokeRect(p.x, 0, this.width, p.y);
                 
-                // Top Pipe Cap
-                ctx.fillRect(p.x, topY - 20, this.width, 20);
-                ctx.strokeRect(p.x, topY - 20, this.width, 20);
-
-                // Bottom Pipe Cap
-                ctx.fillRect(p.x, bottomY, this.width, 20);
-                ctx.strokeRect(p.x, bottomY, this.width, 20);
-
-                // Bottom Pipe Body
-                ctx.fillRect(p.x + 2, bottomY + 20, this.width - 4, canvas.height - bottomY - 70);
-                ctx.strokeRect(p.x + 2, bottomY + 20, this.width - 4, canvas.height - bottomY - 70);
+                // Bottom Pipe
+                let bottomHeight = canvas.height - (p.y + this.gap) - 50;
+                ctx.fillRect(p.x, p.y + this.gap, this.width, bottomHeight);
+                ctx.strokeRect(p.x, p.y + this.gap, this.width, bottomHeight);
+                
+                ctx.shadowBlur = 0;
             }
         },
         update() {
@@ -298,54 +280,54 @@
         ctx.textAlign = "center";
         
         if (currentState === 1) {
-            ctx.font = "bold 40px 'Inter', sans-serif";
-            ctx.strokeText(score, canvas.width/2, 50);
-            ctx.fillText(score, canvas.width/2, 50);
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#00f3ff";
+            ctx.font = "900 45px 'Outfit', sans-serif";
+            ctx.fillText(score, canvas.width/2, 60);
+            ctx.shadowBlur = 0;
         } else if (currentState === 2) {
-            // Glassmorphism Game Over Board
-            ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+            ctx.fillStyle = "rgba(0,0,0,0.85)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = "#ff00e4";
+            ctx.fillStyle = "#ff00e4";
+            ctx.font = "900 35px 'Outfit', sans-serif";
+            ctx.fillText("GAME OVER", canvas.width/2, 120);
+            
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#00f3ff";
             ctx.fillStyle = "#fff";
-            ctx.font = "bold 30px 'Outfit', sans-serif";
-            ctx.fillText("GAME OVER", canvas.width/2, 140);
+            ctx.font = "bold 55px 'Outfit', sans-serif";
+            ctx.fillText(score, canvas.width/2, 190);
             
-            ctx.fillStyle = "#ffcc00";
-            ctx.font = "bold 25px 'Inter', sans-serif";
-            ctx.fillText("SCORE: " + score, canvas.width/2, 200);
-            
-            ctx.fillStyle = "#2ecc71";
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#aaa";
+            ctx.font = "600 16px 'Inter', sans-serif";
             ctx.fillText("BEST: " + bestScore, canvas.width/2, 240);
-
+            
             ctx.fillStyle = "#fff";
-            ctx.font = "16px 'Outfit', sans-serif";
-            ctx.fillText("- Klik untuk Mengulang -", canvas.width/2, 320);
+            ctx.font = "500 14px 'Inter', sans-serif";
+            ctx.fillText("- Sentuh untuk Restart -", canvas.width/2, 320);
         } else if (currentState === 0) {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+            ctx.fillStyle = "rgba(0,0,0,0.7)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            ctx.fillStyle = "#fff";
-            ctx.font = "bold 30px 'Outfit', sans-serif";
-            ctx.fillText("GET READY", canvas.width/2, 180);
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = "#00f3ff";
+            ctx.fillStyle = "#00f3ff";
+            ctx.font = "900 35px 'Outfit', sans-serif";
+            ctx.fillText("FLAPPY MS", canvas.width/2, 160);
             
-            ctx.font = "16px 'Inter', sans-serif";
-            ctx.fillText("Klik atau Spasi untuk Terbang", canvas.width/2, 230);
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#fff";
+            ctx.font = "400 14px 'Inter', sans-serif";
+            ctx.fillText("Sentuh untuk Terbang", canvas.width/2, 210);
+            
+            ctx.fillStyle = "rgba(255,255,255,0.6)";
+            ctx.font = "italic 12px 'Inter', sans-serif";
+            ctx.fillText("- Klik untuk Mulai -", canvas.width/2, 270);
         }
-    }
-
-    function resetGame() {
-        bird.y = 150;
-        bird.velocity = 0;
-        pipes.reset();
-        score = 0;
-    }
-
-    function draw() {
-        bg.draw();
-        pipes.draw();
-        floor.draw();
-        bird.draw();
-        drawScore();
     }
 
     function update() {
@@ -353,6 +335,28 @@
         floor.update();
         bird.update();
         pipes.update();
+        
+        if (screenShake > 0) {
+            screenShake *= 0.9;
+            if (screenShake < 0.5) screenShake = 0;
+        }
+    }
+
+    function draw() {
+        ctx.save();
+        if (screenShake > 0) {
+            let dx = (Math.random() - 0.5) * screenShake;
+            let dy = (Math.random() - 0.5) * screenShake;
+            ctx.translate(dx, dy);
+        }
+        
+        bg.draw();
+        pipes.draw();
+        floor.draw();
+        bird.draw();
+        drawScore();
+        
+        ctx.restore();
     }
 
     function loop() {
@@ -362,14 +366,24 @@
         animationId = requestAnimationFrame(loop);
     }
 
+    function resetGame() {
+        score = 0;
+        frames = 0;
+        bird.y = 150;
+        bird.velocity = 0;
+        pipes.reset();
+        screenShake = 0;
+    }
+
     // Controls
     canvas.addEventListener("pointerdown", (e) => {
         const rect = canvas.getBoundingClientRect();
-        const isVisible = (rect.top >= 0 && rect.bottom <= window.innerHeight);
+        const isVisible = (rect.top < window.innerHeight && rect.bottom > 0);
         if(isVisible) {
-            e.preventDefault(); // Prevents double firing on mobile
+            e.preventDefault(); 
             switch(currentState) {
                 case 0:
+                    resetGame();
                     currentState = 1;
                     bird.flap();
                     break;
@@ -377,7 +391,6 @@
                     bird.flap();
                     break;
                 case 2:
-                    resetGame();
                     currentState = 0;
                     break;
             }
@@ -388,11 +401,12 @@
     window.addEventListener("keydown", (e) => {
         if(e.code === "Space") {
             const rect = canvas.getBoundingClientRect();
-            const isVisible = (rect.top >= 0 && rect.bottom <= window.innerHeight);
+            const isVisible = (rect.top < window.innerHeight && rect.bottom > 0);
             if(isVisible) {
                 e.preventDefault();
                 switch(currentState) {
                     case 0:
+                        resetGame();
                         currentState = 1;
                         bird.flap();
                         break;
@@ -400,7 +414,6 @@
                         bird.flap();
                         break;
                     case 2:
-                        resetGame();
                         currentState = 0;
                         break;
                 }

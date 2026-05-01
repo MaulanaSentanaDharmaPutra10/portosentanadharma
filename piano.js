@@ -133,13 +133,29 @@
         }
     }
 
+    let particles = [];
+    let scorePopups = [];
+
+    function addScorePopup(x, y, text) {
+        scorePopups.push({
+            x: x,
+            y: y,
+            text: text,
+            alpha: 1,
+            life: 30
+        });
+    }
+
     function draw() {
-        // Background
-        ctx.fillStyle = "#111"; // dark background
+        // Background with subtle gradient
+        let bgGrd = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 50, canvas.width/2, canvas.height/2, canvas.width);
+        bgGrd.addColorStop(0, "#151515");
+        bgGrd.addColorStop(1, "#0a0a0a");
+        ctx.fillStyle = bgGrd;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Draw grid lines
-        ctx.strokeStyle = "#333";
+        // Draw grid lines with neon pulse
+        ctx.strokeStyle = "rgba(0, 243, 255, 0.05)";
         ctx.lineWidth = 1;
         for (let i = 1; i < cols; i++) {
             ctx.beginPath();
@@ -153,58 +169,119 @@
             let t = tiles[i];
             if (!t.clicked) {
                 // Neon glow effect for unclicked tile
-                ctx.shadowBlur = 15;
+                ctx.save();
+                ctx.shadowBlur = 20;
                 ctx.shadowColor = "#00f3ff";
-                ctx.fillStyle = "#00f3ff"; // Neon Cyan
-                ctx.fillRect(t.x + 2, t.y, colWidth - 4, tileHeight - 2);
-                ctx.shadowBlur = 0; // reset
+                
+                let tileGrd = ctx.createLinearGradient(t.x, t.y, t.x + colWidth, t.y + tileHeight);
+                tileGrd.addColorStop(0, "#00f3ff");
+                tileGrd.addColorStop(1, "#00a3ff");
+                
+                ctx.fillStyle = tileGrd;
+                // Draw rounded rectangle for more professional look
+                const r = 8;
+                ctx.beginPath();
+                ctx.moveTo(t.x + 4 + r, t.y + 2);
+                ctx.lineTo(t.x + colWidth - 4 - r, t.y + 2);
+                ctx.quadraticCurveTo(t.x + colWidth - 4, t.y + 2, t.x + colWidth - 4, t.y + 2 + r);
+                ctx.lineTo(t.x + colWidth - 4, t.y + tileHeight - 2 - r);
+                ctx.quadraticCurveTo(t.x + colWidth - 4, t.y + tileHeight - 2, t.x + colWidth - 4 - r, t.y + tileHeight - 2);
+                ctx.lineTo(t.x + 4 + r, t.y + tileHeight - 2);
+                ctx.quadraticCurveTo(t.x + 4, t.y + tileHeight - 2, t.x + 4, t.y + tileHeight - 2 - r);
+                ctx.lineTo(t.x + 4, t.y + 2 + r);
+                ctx.quadraticCurveTo(t.x + 4, t.y + 2, t.x + 4 + r, t.y + 2);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
             } else {
-                // Clicked tile effect (faded)
-                ctx.fillStyle = "rgba(0, 243, 255, 0.15)";
-                ctx.fillRect(t.x + 2, t.y, colWidth - 4, tileHeight - 2);
+                // Clicked tile effect (faded but with trail)
+                ctx.fillStyle = "rgba(0, 243, 255, 0.1)";
+                ctx.fillRect(t.x + 4, t.y + 2, colWidth - 8, tileHeight - 4);
+            }
+        }
+
+        // Draw score popups
+        for (let i = 0; i < scorePopups.length; i++) {
+            let p = scorePopups[i];
+            ctx.save();
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 20px 'Outfit', sans-serif";
+            ctx.fillText(p.text, p.x, p.y);
+            p.y -= 1;
+            p.alpha -= 0.03;
+            p.life--;
+            ctx.restore();
+            if (p.life <= 0) {
+                scorePopups.splice(i, 1);
+                i--;
             }
         }
 
         // Draw UI
         ctx.fillStyle = "#fff";
         ctx.strokeStyle = "#000";
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 4;
         ctx.textAlign = "center";
 
         if (currentState === 1) {
-            ctx.font = "bold 40px 'Inter', sans-serif";
-            ctx.strokeText(score, canvas.width/2, 50);
-            ctx.fillText(score, canvas.width/2, 50);
+            // HUD
+            ctx.font = "bold 50px 'Outfit', sans-serif";
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "rgba(0,0,0,0.5)";
+            ctx.fillText(score, canvas.width/2, 70);
+            ctx.shadowBlur = 0;
+            
+            // Progress Bar
+            ctx.fillStyle = "rgba(255,255,255,0.1)";
+            ctx.fillRect(20, 10, canvas.width - 40, 6);
+            ctx.fillStyle = "#00f3ff";
+            let progress = (currentNoteIndex / indonesiaRayaNotes.length) * (canvas.width - 40);
+            ctx.fillRect(20, 10, progress, 6);
         } else if (currentState === 2) {
+            // Professional Game Over Screen
+            ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = "#ff4757";
+            ctx.fillStyle = "#ff4757";
+            ctx.font = "900 40px 'Outfit', sans-serif";
+            ctx.fillText("GAME OVER", canvas.width/2, 120);
+            
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#00f3ff";
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 60px 'Outfit', sans-serif";
+            ctx.fillText(score, canvas.width/2, 200);
+            
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#a1a1aa";
+            ctx.font = "600 16px 'Inter', sans-serif";
+            ctx.fillText("SKOR TERBAIK: " + bestScore, canvas.width/2, 250);
+            
+            ctx.fillStyle = "#fff";
+            ctx.font = "500 14px 'Inter', sans-serif";
+            ctx.fillText("- Sentuh untuk Coba Lagi -", canvas.width/2, 340);
+        } else if (currentState === 0) {
+            // Professional Start Screen
             ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = "#00f3ff";
             ctx.fillStyle = "#00f3ff";
-            ctx.font = "bold 30px 'Outfit', sans-serif";
-            ctx.fillText("GAME OVER", canvas.width/2, 140);
+            ctx.font = "900 36px 'Outfit', sans-serif";
+            ctx.fillText("PIANO NEON", canvas.width/2, 160);
             
+            ctx.shadowBlur = 0;
             ctx.fillStyle = "#fff";
-            ctx.font = "bold 25px 'Inter', sans-serif";
-            ctx.fillText("SCORE: " + score, canvas.width/2, 200);
+            ctx.font = "400 14px 'Inter', sans-serif";
+            ctx.fillText("Ikuti Melodi Indonesia Raya", canvas.width/2, 210);
             
-            ctx.fillStyle = "#ff00e4"; // neon pink
-            ctx.fillText("BEST: " + bestScore, canvas.width/2, 240);
-
-            ctx.fillStyle = "#ccc";
-            ctx.font = "16px 'Outfit', sans-serif";
-            ctx.fillText("- Klik untuk Mengulang -", canvas.width/2, 320);
-        } else if (currentState === 0) {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = "#00f3ff";
-            ctx.font = "bold 30px 'Outfit', sans-serif";
-            ctx.fillText("PIANO NEON", canvas.width/2, 180);
-            
-            ctx.fillStyle = "#fff";
-            ctx.font = "16px 'Inter', sans-serif";
-            ctx.fillText("Sentuh ubin neon yang turun!", canvas.width/2, 230);
-            ctx.fillText("Klik untuk Mulai", canvas.width/2, 260);
+            ctx.fillStyle = "rgba(255,255,255,0.6)";
+            ctx.font = "italic 13px 'Inter', sans-serif";
+            ctx.fillText("- Klik untuk Memulai -", canvas.width/2, 280);
         }
     }
 
@@ -254,6 +331,7 @@
                 bestScore = Math.max(score, bestScore);
                 localStorage.setItem("pianoBest", bestScore);
                 playNote();
+                addScorePopup(x, y - 20, "+1");
                 hit = true;
             }
         }
