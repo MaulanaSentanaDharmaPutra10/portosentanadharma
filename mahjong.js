@@ -7,8 +7,8 @@
     let selectedTile = null;
     let score = 0;
     let gameState = 0; // 0: Start, 1: Play, 2: Win
-    const tileW = 40;
-    const tileH = 50;
+    const tileW = 32;
+    const tileH = 42;
     const symbols = ["🀀", "🀁", "🀂", "🀃", "🀄", "🀅", "🀆", "🀇", "🀈", "🀉", "🀊", "🀋", "🀌", "🀍", "🀎", "🀏", "🀐", "🀑"];
     
     let audioCtx = null;
@@ -51,7 +51,7 @@
             for (let c = 0; c < 8; c++) {
                 if (idx < availableSymbols.length) {
                     tiles.push({
-                        x: 15 + c * (tileW + 2),
+                        x: 25 + c * (tileW + 2),
                         y: 80 + r * (tileH + 2),
                         z: 0,
                         symbol: availableSymbols[idx++],
