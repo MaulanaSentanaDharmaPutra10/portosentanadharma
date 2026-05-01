@@ -292,13 +292,17 @@
     <section id="mini-game" class="section">
         <div class="container">
             <div class="section-header reveal reveal-fade-up">
-                <h2 class="section-title">Mini <span class="highlight">Game</span></h2>
+                <h2 class="section-title">Mini <span class="highlight">Games</span></h2>
                 <div class="line"></div>
-                <p class="section-subtitle">Luangkan waktu sejenak untuk bermain Flappy MS. Klik canvas atau tekan Spasi untuk melompat!</p>
+                <p class="section-subtitle">Luangkan waktu sejenak untuk bermain. Mainkan Flappy MS (Kiri) atau Piano Neon (Kanan)!</p>
             </div>
             
-            <div style="display: flex; justify-content: center; align-items: center; margin-top: 30px; margin-bottom: 20px;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-top: 30px; margin-bottom: 20px;">
+                <!-- Flappy MS -->
                 <canvas id="gameCanvas" width="320" height="480" style="background: #70c5ce; border-radius: 10px; border: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;"></canvas>
+                
+                <!-- Piano Tiles -->
+                <canvas id="pianoCanvas" width="320" height="480" style="background: #111; border-radius: 10px; border: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;"></canvas>
             </div>
         </div>
     </section>
@@ -472,6 +476,7 @@
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
     <script src="game.js"></script>
+    <script src="piano.js"></script>
 </body>
 
 </html>
