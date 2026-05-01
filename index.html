@@ -312,30 +312,30 @@
 
             <div class="arcade-carousel-container reveal reveal-fade-up">
                 <div class="arcade-slider-wrapper">
-                    <button class="carousel-control prev" id="gamePrev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-control prev" id="gamePrev" aria-label="Previous Game"><i class="fas fa-chevron-left"></i></button>
                     
                     <div class="arcade-slider" id="arcadeSlider">
-                        <div class="game-wrapper">
-                            <button class="close-game"><i class="fas fa-times"></i></button>
-                            <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #ff00e4; text-shadow: 0 0 10px #ff00e4; font-weight: 800;">
+                        <div class="game-wrapper" title="Klik untuk mainkan">
+                            <button class="close-game" aria-label="Close Game"><i class="fas fa-times"></i></button>
+                            <h3 style="font-family: 'Outfit', sans-serif; color: #ff00e4; text-shadow: 0 0 10px #ff00e4; font-weight: 800;">
                                 FLAPPY MS</h3>
                             <canvas id="gameCanvas" width="320" height="480"></canvas>
                         </div>
-                        <div class="game-wrapper">
-                            <button class="close-game"><i class="fas fa-times"></i></button>
-                            <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #f59e0b; text-shadow: 0 0 10px #f59e0b; font-weight: 800;">
+                        <div class="game-wrapper" title="Klik untuk mainkan">
+                            <button class="close-game" aria-label="Close Game"><i class="fas fa-times"></i></button>
+                            <h3 style="font-family: 'Outfit', sans-serif; color: #f59e0b; text-shadow: 0 0 10px #f59e0b; font-weight: 800;">
                                 MAHJONG NEON</h3>
                             <canvas id="mahjongCanvas" width="320" height="480"></canvas>
                         </div>
-                        <div class="game-wrapper">
-                            <button class="close-game"><i class="fas fa-times"></i></button>
-                            <h3 style="margin-bottom: 15px; font-family: 'Outfit', sans-serif; color: #00f3ff; text-shadow: 0 0 10px #00f3ff; font-weight: 800;">
+                        <div class="game-wrapper" title="Klik untuk mainkan">
+                            <button class="close-game" aria-label="Close Game"><i class="fas fa-times"></i></button>
+                            <h3 style="font-family: 'Outfit', sans-serif; color: #00f3ff; text-shadow: 0 0 10px #00f3ff; font-weight: 800;">
                                 PIANO NEON</h3>
                             <canvas id="pianoCanvas" width="320" height="480"></canvas>
                         </div>
                     </div>
 
-                    <button class="carousel-control next" id="gameNext"><i class="fas fa-chevron-right"></i></button>
+                    <button class="carousel-control next" id="gameNext" aria-label="Next Game"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
 
@@ -345,120 +345,141 @@
                 <span class="dot"></span>
             </div>
             <style>
+                #arcade {
+                    padding: var(--section-padding) 0;
+                    overflow: hidden;
+                }
+
                 .arcade-carousel-container {
-                    position: relative;
                     width: 100%;
-                    margin: 1rem 0;
+                    max-width: 1400px;
+                    margin: 0 auto;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    overflow: hidden;
                 }
 
                 .arcade-slider-wrapper {
                     position: relative;
                     width: 100%;
-                    max-width: 1200px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    padding: 0 40px;
                 }
 
                 .arcade-slider {
                     display: flex;
                     overflow-x: auto;
-                    width: 100%;
                     scroll-behavior: smooth;
-                    gap: 2rem;
-                    padding: 2rem 0;
+                    gap: 30px;
+                    padding: 40px 20px;
+                    width: 100%;
                     scroll-snap-type: x mandatory;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
-                    /* Standard centering for flex items */
-                    justify-content: flex-start;
                 }
 
                 .arcade-slider::-webkit-scrollbar { display: none; }
 
-                .arcade-slider .game-wrapper {
-                    flex: 0 0 280px; /* Fixed width for better control */
-                    scroll-snap-align: center;
-                    background: var(--bg-secondary);
-                    padding: 2rem;
-                    border-radius: 24px;
-                    border: 1px solid var(--glass-border);
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    transition: all 0.4s ease;
-                    position: relative;
-                    /* Ensure items are centered in their own space */
-                    margin: 0 auto; 
-                }
-
-                /* Center items if they don't overflow */
-                @media (min-width: 950px) {
+                /* Centering trick for scrollable flex */
+                @media (min-width: 1024px) {
                     .arcade-slider {
                         justify-content: center;
                     }
                 }
 
-                /* Fullscreen Focus Mode */
+                .arcade-slider .game-wrapper {
+                    flex: 0 0 300px;
+                    scroll-snap-align: center;
+                    background: var(--bg-secondary);
+                    padding: 30px;
+                    border-radius: 24px;
+                    border: 1px solid var(--glass-border);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    cursor: pointer;
+                    position: relative;
+                }
+
+                .arcade-slider .game-wrapper:hover {
+                    transform: translateY(-10px);
+                    border-color: var(--primary-color);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+                }
+
+                .arcade-slider .game-wrapper h3 {
+                    margin-bottom: 20px;
+                    font-size: 1.1rem;
+                    letter-spacing: 2px;
+                }
+
+                /* Fullscreen Overlay Mode */
                 .game-wrapper.expanded {
                     position: fixed !important;
-                    inset: 0 !important;
+                    top: 0 !important;
+                    left: 0 !important;
                     width: 100vw !important;
                     height: 100dvh !important;
-                    z-index: 100000 !important;
-                    background: rgba(0, 0, 0, 0.95) !important;
-                    padding: 0 !important;
+                    z-index: 99999 !important;
+                    background: #050505 !important;
                     margin: 0 !important;
+                    padding: 0 !important;
+                    border: none !important;
+                    border-radius: 0 !important;
                     display: flex !important;
                     flex-direction: column !important;
                     align-items: center !important;
                     justify-content: center !important;
-                    border: none !important;
-                    border-radius: 0 !important;
-                    animation: zoomIn 0.3s ease-out;
+                    cursor: default !important;
+                }
+
+                .game-wrapper.expanded canvas {
+                    max-width: 95vw !important;
+                    max-height: 80vh !important;
+                    width: auto !important;
+                    height: auto !important;
+                    box-shadow: 0 0 100px rgba(0, 243, 255, 0.15);
+                    border-radius: 12px;
                 }
 
                 .game-wrapper.expanded h3 {
                     position: absolute;
-                    top: 5vh;
-                    font-size: 1.2rem !important;
-                    color: #fff;
-                    text-shadow: 0 0 10px rgba(255,255,255,0.5);
-                    z-index: 100001;
-                }
-
-                .game-wrapper.expanded canvas {
-                    max-width: 90vw !important;
-                    max-height: 75vh !important;
-                    height: auto !important;
-                    width: auto !important;
-                    box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
-                    border: 2px solid rgba(255,255,255,0.1);
+                    top: 30px;
+                    font-size: 1.4rem !important;
+                    opacity: 0.8;
                 }
 
                 .close-game {
                     position: absolute;
-                    top: 20px;
-                    right: 20px;
-                    width: 45px;
-                    height: 45px;
+                    top: 25px;
+                    right: 25px;
+                    width: 50px;
+                    height: 50px;
                     background: #ff4757;
                     border: none;
                     border-radius: 50%;
                     color: #fff;
-                    display: none;
+                    font-size: 1.5rem;
+                    display: none; /* Only show when expanded */
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
-                    z-index: 100005;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+                    z-index: 100000;
+                    box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+                    transition: 0.3s;
                 }
 
-                .game-wrapper.expanded .close-game { display: flex; }
+                .close-game:hover {
+                    transform: scale(1.1) rotate(90deg);
+                    background: #ff6b81;
+                }
+
+                .game-wrapper.expanded .close-game {
+                    display: flex;
+                }
 
                 .carousel-control {
                     position: absolute;
@@ -466,33 +487,35 @@
                     transform: translateY(-50%);
                     width: 50px;
                     height: 50px;
-                    background: rgba(255,255,255,0.05);
-                    backdrop-filter: blur(10px);
+                    background: rgba(255,255,255,0.03);
                     border: 1px solid rgba(255,255,255,0.1);
                     color: #fff;
                     border-radius: 50%;
                     cursor: pointer;
-                    z-index: 100;
+                    z-index: 10;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     transition: 0.3s;
                 }
 
-                .carousel-control:hover { background: var(--primary-color); }
-                .prev { left: 0; }
-                .next { right: 0; }
+                .carousel-control:hover {
+                    background: var(--primary-color);
+                    border-color: var(--primary-color);
+                }
 
-                @media (max-width: 1024px) {
+                .prev { left: -10px; }
+                .next { right: -10px; }
+
+                @media (max-width: 1100px) {
                     .carousel-control { display: none; }
+                    .arcade-slider-wrapper { padding: 0; }
                 }
 
                 .carousel-dots {
                     display: flex;
-                    gap: 10px;
-                    margin-top: 10px;
-                    justify-content: center;
-                    width: 100%;
+                    gap: 12px;
+                    margin-top: 20px;
                 }
 
                 .dot {
@@ -501,12 +524,13 @@
                     border-radius: 5px;
                     background: rgba(255,255,255,0.1);
                     cursor: pointer;
-                    transition: 0.3s;
+                    transition: all 0.3s ease;
                 }
 
                 .dot.active {
                     background: var(--primary-color);
-                    width: 30px;
+                    width: 35px;
+                    box-shadow: 0 0 15px var(--primary-color);
                 }
             </style>
 
