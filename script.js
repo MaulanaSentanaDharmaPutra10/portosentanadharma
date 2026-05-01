@@ -107,7 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (arcadeSlider) {
         let currentIndex = 0;
-        const gameCount = document.querySelectorAll('.arcade-slider .game-wrapper').length;
+        const gameWrappers = document.querySelectorAll('.arcade-slider .game-wrapper');
+        const gameCount = gameWrappers.length;
 
         const updateDots = (index) => {
             dots.forEach((dot, i) => {
