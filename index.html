@@ -398,7 +398,8 @@
 
             // Start everything when user clicks "Enter Site"
             enterBtn.addEventListener("click", function() {
-                // Play music
+                // Play music and lower its volume to balance with game/UI sounds
+                music.volume = 0.4;
                 const playPromise = music.play();
                 if (playPromise !== undefined) {
                     playPromise.then(_ => {
@@ -443,12 +444,12 @@
                     const osc = audioCtx.createOscillator();
                     const gainNode = audioCtx.createGain();
                     
-                    // Create a sharp, subtle "click/pop" sound
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+                    // Create a sharp, punchy "click/pop" sound (Louder & Crisper)
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.05);
                     
-                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
                     gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
                     
                     osc.connect(gainNode);
